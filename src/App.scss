@@ -1,0 +1,40 @@
+.app{
+    height: 100vh;
+
+    .sections{
+
+        width: 100%;
+        height: calc(100vh - 70px);
+        background-color: white;
+        //position: fixed;
+        position: relative;
+        top: 70px;
+        //display: inline-block;
+        overflow-x: hidden; // fondamentale siummmm
+        scroll-behavior: smooth;
+        scroll-snap-type: y mandatory;
+        scrollbar-width: none;  // for firefox
+        &.active{
+            width: 65%;
+
+        }
+         &::-webkit-scrollbar{
+             
+            display: none;
+        }
+
+        > * {
+            width: 100%;
+            height: calc(100vh - 70px);
+            scroll-snap-align: start;
+        } 
+    }
+}
+
+.login {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}

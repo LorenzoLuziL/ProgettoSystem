@@ -1,0 +1,27 @@
+{
+  "name": "SSI",
+  "prefix": "ssi",
+  "uri": "http://magic",
+  "xml": {
+    "tagAlias": "lowerCase"
+  },
+  "associations": [],
+  "types": [
+    {
+      "name": "BewitchedStartEvent",
+      "extends": ["bpmn:BaseElement"],
+      "properties": [
+        {
+          "name": "spell",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "altroCampo",
+          "isAttr": true,
+          "type": "String"
+        }
+      ]
+    }
+  ]
+}

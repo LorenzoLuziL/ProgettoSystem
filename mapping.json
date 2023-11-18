@@ -1,0 +1,27 @@
+{
+    "seller": { 
+        "agentPort": 8041,
+        "walletName":"myWalletSeller"
+    },
+    "registry": 
+    { 
+        "agentPort": 8051,
+        "walletName":"registryWallet"
+    },
+    "broker": { 
+        "agentPort": 8061,
+        "walletName":"brokerWallet"
+    },
+    "buyer": { 
+        "agentPort": 8071,
+        "walletName":"myWalletBuyer"
+    },
+    "sellersbank": {
+        "agentPort": 8081,
+        "walletName":"sellersBankWallet"
+        },
+    "buyersbank": {
+        "agentPort": 8091,
+        "walletName":"buyersBankWallet"
+        }
+}

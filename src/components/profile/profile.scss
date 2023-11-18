@@ -1,0 +1,227 @@
+@import "../../global.scss";
+
+.profile{
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    h1{
+        font-size: 50px;
+
+        @include mobile{
+            font-size: 20px;
+        }
+    }
+
+    .containerAccount{
+        // border: 1px solid black;
+        width: 100%;
+        display: flex;
+        flex: .5;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row;
+
+        .left{
+            // border: 1px solid black;
+            display: flex;
+            flex: .5;
+            height: 100%;
+            align-items: center;
+            justify-content: flex-end;
+
+            .imgContainer{
+                width: 15vw;
+                height: 15vw;
+                // background-color: crimson;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+
+                .icon{
+                    color: white;
+                    font-size: 150px;
+                }
+    
+                h2{
+                    color: white;
+                }
+            }
+        }
+
+        .right{
+            // border: 1px solid black;
+            display: flex;
+            flex: 1;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+
+            .files input {
+                outline: 2px dashed #92b0b3;
+                outline-offset: -10px;
+                -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+                transition: outline-offset .15s ease-in-out, background-color .15s linear;
+                padding: 120px 0px 85px 35%;
+                text-align: center !important;
+                margin: 0;
+                width: 100% !important;
+            }
+            .files input:focus{     outline: 2px dashed #92b0b3;  outline-offset: -10px;
+                -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+                transition: outline-offset .15s ease-in-out, background-color .15s linear; border:1px solid #92b0b3;
+            }
+            .files{ position:relative}
+            .files:after {  pointer-events: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 40px;
+                right: 0;
+                height: 56px;
+                content: "";
+                background-image: url(https://image.flaticon.com/icons/png/128/109/109612.png);
+                display: block;
+                margin: 0 auto;
+                background-size: 100%;
+                background-repeat: no-repeat;
+            }
+            .color input{ background-color:#f1f1f1;}
+            .files:before {
+                position: absolute;
+                bottom: 10px;
+                left: 0;  pointer-events: none;
+                width: 100%;
+                right: 0;
+                height: 57px;
+                content: " or drag it here. ";
+                display: block;
+                margin: 0 auto;
+                color: #2ea591;
+                font-weight: 600;
+                text-transform: capitalize;
+                text-align: center;
+            }
+
+            .wrapper{
+                // border: 1px solid black;
+                width: 100%;
+                height: 100%;
+                padding-left: 50px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+    
+                h1{
+                    font-size: 60px;
+                    margin: 10px 0;
+                }
+                h2{
+                    font-size: 35px;
+                }
+                h3{
+                    font-size: 30px;
+                    opacity: .6;
+                }
+            }
+        }
+    }
+
+    .containerModels{
+        // border: 1px solid black;
+        width: 100%;
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        h4{
+            font-size: 25px;
+            padding-right: 20px;
+        }
+
+        .raw{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container{
+            // border: 1px solid black;
+    
+            width: 80%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+    
+            @include mobile{
+                width: 100%;
+            }
+
+            .containerItem {
+                align-items: center;
+                justify-content: center;
+                display: flex;
+                flex-direction: column;
+
+                .button {
+                    color: white;
+                    background-color: green;
+                    text-decoration: none;
+                    // width: 20%;
+                    padding: 5px 10px; 
+                    border-radius: 20px;
+                    font-size: 16px;
+                    border: 0px;
+                    cursor: pointer;
+                }
+            }
+    
+            .item{
+                width: 220px;
+                height: 150px;
+                border-radius: 20px;
+                border: 1px solid rgb(235, 235, 235);
+                margin: 10px 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                position: relative;
+                transition: all .5s ease;
+                cursor: pointer;
+    
+                @include mobile{
+                    width: 130px;
+                    height: 100px;
+                }
+    
+                h3{
+                    position: absolute;
+                    font-size: 15px;
+                }
+    
+                img{
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain; // oppure cover
+                    z-index: 1;
+                }
+    
+                &:hover{
+                    background-color: $mainColor;
+                    img{
+                        opacity: 0.2;
+                        z-index: 0;
+                    }
+                }
+            }
+        }
+    }
+}

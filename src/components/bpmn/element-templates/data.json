@@ -1,0 +1,350 @@
+[
+    {
+      "$schema": "https://unpkg.com/@camunda/element-templates-json-schema@0.4.0/resources/schema.json",
+      "name": "GET CALL Thinger.io",
+      "id": "getCallThinger",
+      "appliesTo": [
+        "bpmn:Participant"
+      ],
+      "properties": [
+        {
+          "label": "Link",
+          "type": "String",
+          "binding": {
+            "type": "magic:spell",
+            "name": "link"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },
+        {
+          "label": "Token",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "token"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },
+        {
+          "label": "Implementation Type",
+          "type": "String",
+          "value": "external",
+          "editable": false,
+          "binding": {
+            "type": "property",
+            "name": "camunda:type"
+          }
+        },
+        {
+          "label": "Topic",
+          "type": "String",
+          "editable": false,
+          "value": "getThinger",
+          "binding": {
+            "type": "property",
+            "name": "camunda:topic"
+          }
+        }
+      ]
+    },
+    {
+      "$schema": "https://unpkg.com/@camunda/element-templates-json-schema@0.4.0/resources/schema.json",
+      "name": "POST CALL Thinger.io",
+      "id": "postCallThinger",
+      "appliesTo": [
+        "bpmn:Participant"
+      ],
+      "properties": [
+        {
+          "label": "Thinger.io account name",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "accnt"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },
+        {
+          "label": "Device name",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "dvc"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },
+        {
+          "label": "Token",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "tkn"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },
+        {
+          "label": "URI",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "uri"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },
+        {
+          "label": "Humidity %",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "hmd"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },
+        {
+          "label": "Temperature °C",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "tmp"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },
+        {
+          "label": "Implementation Type",
+          "type": "String",
+          "value": "external",
+          "editable": false,
+          "binding": {
+            "type": "property",
+            "name": "camunda:type"
+          }
+        },
+        {
+          "label": "Topic",
+          "type": "String",
+          "editable":false,
+          "value": "postThinger",
+          "binding": {
+            "type": "property",
+            "name": "camunda:topic"
+          }
+        }
+      ]
+    },
+    {
+      "$schema": "https://unpkg.com/@camunda/element-templates-json-schema@0.4.0/resources/schema.json",
+      "name": "GET HTTP",
+      "id": "gethttp",
+      "appliesTo": [
+        "bpmn:ChoreographyTask"
+      ],
+      "properties": [
+        {
+          "label": "Link",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "link"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },
+        {
+          "label": "Implementation Type",
+          "type": "String",
+          "value": "external",
+          "editable": false,
+          "binding": {
+            "type": "property",
+            "name": "camunda:type"
+          }
+        },
+        {
+          "label": "Topic",
+          "type": "String",
+          "value": "getHttp",
+          "editable":false,
+          "binding": {
+            "type": "property",
+            "name": "camunda:topic"
+          }
+        }
+      ]
+    },
+    {
+      "$schema": "https://unpkg.com/@camunda/element-templates-json-schema@0.4.0/resources/schema.json",
+      "name": "POST HTTP",
+      "id": "posthttp",
+      "appliesTo": [
+        "bpmn:ServiceTask"
+      ],
+      "properties": [
+        {
+          "label": "IP Address",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "address"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },
+        {
+          "label": "Parameter name",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "parameter"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },
+        {
+          "label": "Value",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "value"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },
+        {
+          "label": "Implementation Type",
+          "type": "String",
+          "value": "external",
+          "editable": false,
+          "binding": {
+            "type": "property",
+            "name": "camunda:type"
+          }
+        },
+        {
+          "label": "Topic",
+          "type": "String",
+          "editable": false,
+          "value": "postHttp",
+          "binding": {
+            "type": "property",
+            "name": "camunda:topic"
+          }
+        }
+      ]
+    },
+    {
+      "$schema": "https://unpkg.com/@camunda/element-templates-json-schema@0.4.0/resources/schema.json",
+      "name": "GET MQTT",
+      "id": "getmqtt",
+      "appliesTo": [
+        "bpmn:ServiceTask"
+      ],
+      "properties": [
+        {
+          "label": "Broker IP Address",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "brkr"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },    
+        {
+          "label": "Topic",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "tpcinpt"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },     
+        {
+          "label": "Topic",
+          "type": "String",
+          "value": "getMqtt",
+          "editable":false,
+          "binding": {
+            "type": "property",
+            "name": "camunda:topic"
+          }
+        }
+      ]
+    },
+    {
+      "$schema": "https://unpkg.com/@camunda/element-templates-json-schema@0.4.0/resources/schema.json",
+      "name": "POST MQTT",
+      "id": "postmqtt",
+      "appliesTo": [
+        "bpmn:ServiceTask"
+      ],
+      "properties": [
+        {
+          "label": "Value",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "content"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },
+        {
+          "label": "Broker IP Address",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "brkr"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },    
+        {
+          "label": "Topic",
+          "type": "String",
+          "binding": {
+            "type": "camunda:inputParameter",
+            "name": "tpc"
+          },
+          "constraints": {
+            "notEmpty": true
+          }
+        },     
+        {
+          "label": "Topic",
+          "type": "String",
+          "value": "postMqtt",
+          "editable":false,
+          "binding": {
+            "type": "property",
+            "name": "camunda:topic"
+          }
+        }
+      ]
+    }
+  ]
+ 
