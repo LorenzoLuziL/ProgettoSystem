@@ -249,3 +249,16 @@ export function checkRevocationAPI(port, credId) {
 
     })
 }
+
+export function createCurl(body){
+   return request({
+    url:"http://localhost:9001/utenti",
+    method:'GET',
+    
+   })
+    
+    
+}
+export function creaAgents(){
+    
+}

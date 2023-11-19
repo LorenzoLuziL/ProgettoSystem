@@ -11,6 +11,7 @@ import ChoreoModeler from 'chor-js/lib/Modeler';
 import magicPropertiesProviderModule from '../../lib/property-panel/provider/magic';
 import magicModdleDescriptor from '../../lib/property-panel/descriptors/magic';
 import { _agents, _mortgageSchema, _offerPropertySchema, _ownershipSchema } from "../../ssi/config";
+import {createCurl} from "../../components/util/APIUtils";
 
 
 class BpmnModelerComponent extends React.Component {
@@ -270,17 +271,17 @@ class BpmnModelerComponent extends React.Component {
 }
 function getXml(modeler) {
   const elementRegistry = modeler.get('elementRegistry');
-console.log(elementRegistry)
   // Get all elements
   const allElements = elementRegistry.getAll();
 
   // Filter only tasks in the choreography
   const choreographyTasks = allElements.filter(element => {
     const elementType = element.type;
-    console.log(elementType)
     return elementType === 'bpmn:ChoreographyTask';
   });
 
-  console.log('Choreography Tasks:', choreographyTasks);
+  // console.log(choreographyTasks);
+  createCurl(choreographyTasks);
+
 }
 export default BpmnModelerComponent;
