@@ -15,17 +15,31 @@ function createMagicTabGroups(element, translate) {
     label: "Self Sovereign Identity",
     entries: [
       entryFactory.textField(translate, {
-      id: "spell",
-      description: "Apply a black magic spell",
-      label: "Spell",
-      modelProperty: "spell",
+      id: "seed",
+      description: "identificativo dell'agente",
+      label: "Seed",
+      modelProperty: "seed",
     }),
     entryFactory.textField(translate, {
-      id: "altroCampo",
-      description: "Apply a black magic spell",
-      label: "campo",
+      id: "walletName",
+      description: "campo che serve per il comando di creazione",
+      label: "wallet-name",
       //modelProperty è quello che vado a mettere ne xml
-      modelProperty: "altroCampo",
+      modelProperty: "walletName",
+    }),
+    entryFactory.textField(translate, {
+      id: "label",
+      description: "Fa parte dei comandi della creazione",
+      label: "label",
+      //modelProperty è quello che vado a mettere ne xml
+      modelProperty: "label",
+    }),
+    entryFactory.textField(translate, {
+      id: "prop",
+      description: "Proprieta",
+      label: "prop",
+      //modelProperty è quello che vado a mettere ne xml
+      modelProperty: "prop",
     }),
     ]/*  {
       id:"magicButton",

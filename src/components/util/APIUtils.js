@@ -251,13 +251,44 @@ export function checkRevocationAPI(port, credId) {
 }
 
 export function createCurl(body){
-   return request({
-    url:"http://localhost:9001/utenti",
-    method:'GET',
+    console.log(body)
+    const senderRequestBody=[];
+    body.forEach((element)=>{
+            element.businessObject.participantRef.forEach((e)=>{
+                if(! senderRequestBody.some(obj=>obj.id==e.id)){
+                    console.log("pusho")
+                    senderRequestBody.push(e)
+                }
+            })
+    })
+    console.log(senderRequestBody)
+    sender(senderRequestBody)
+    .then(response => {
+        console.log('Sender: Request sent successfully', response);
+    })
+    .catch(error => {
+        console.error('Sender: Error sending request', error);
+    });
+}
+export function sender(body){
+    const url = `http://localhost:9001/utenti`;
     
-   })
-    
-    
+    return fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .catch(error => {
+        throw error.message || 'An error occurred while processing the request.';
+    });
 }
 export function creaAgents(){
     

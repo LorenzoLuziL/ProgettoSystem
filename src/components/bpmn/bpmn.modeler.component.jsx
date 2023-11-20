@@ -279,7 +279,7 @@ function getXml(modeler) {
     const elementType = element.type;
     return elementType === 'bpmn:ChoreographyTask';
   });
-
+  console.log(choreographyTasks)
   // console.log(choreographyTasks);
   createCurl(choreographyTasks);
 

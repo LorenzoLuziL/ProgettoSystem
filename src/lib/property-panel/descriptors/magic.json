@@ -12,12 +12,22 @@
       "extends": ["bpmn:BaseElement"],
       "properties": [
         {
-          "name": "spell",
+          "name": "seed",
           "isAttr": true,
           "type": "String"
         },
         {
-          "name": "altroCampo",
+          "name": "walletName",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "label",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "prop",
           "isAttr": true,
           "type": "String"
         }
