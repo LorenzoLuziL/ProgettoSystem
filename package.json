@@ -37,6 +37,7 @@
     "min-dash": "^3.7.0",
     "min-dom": "^4.1.0",
     "node-cmd": "^5.0.0",
+    "node-fetch": "^2.7.0",
     "python": "^0.0.4",
     "react": "^17.0.2",
     "react-app-rewired": "^2.2.1",

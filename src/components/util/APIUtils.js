@@ -141,6 +141,9 @@ export function connectAgents(port) {
 }
 
 export function receiveInvitation(invitation, receiver) {
+
+    //TODO: da qui ciclo nei vari agent presenti nella coreografi 
+    // mettere codice per fare in modo prima di creare i vari agent e poi di connetterli
     var arr = Object.entries(_agents).map(item => item[1].agentPort);
     //console.log("provaaa", Object.entries(_agents)[i][1].agentPort)
 
@@ -251,17 +254,14 @@ export function checkRevocationAPI(port, credId) {
 }
 
 export function createCurl(body){
-    console.log(body)
     const senderRequestBody=[];
     body.forEach((element)=>{
             element.businessObject.participantRef.forEach((e)=>{
                 if(! senderRequestBody.some(obj=>obj.id==e.id)){
-                    console.log("pusho")
                     senderRequestBody.push(e)
                 }
             })
     })
-    console.log(senderRequestBody)
     sender(senderRequestBody)
     .then(response => {
         console.log('Sender: Request sent successfully', response);
@@ -271,6 +271,7 @@ export function createCurl(body){
     });
 }
 export function sender(body){
+
     const url = `http://localhost:9001/utenti`;
     
     return fetch(url, {
@@ -290,6 +291,32 @@ export function sender(body){
         throw error.message || 'An error occurred while processing the request.';
     });
 }
-export function creaAgents(){
+export function sendCurl(body){
+    body.forEach((seedAgents)=>{
+        excuteCurl(seedAgents.seed)
+    })
     
+    
+}
+export function excuteCurl(seedAgents){
+    console.log("mando le curl al server")
+    const url=`http://localhost:9001/curl`
+    let tempString="00000000000000000000000000000000"
+    tempString = tempString.slice(0, -1) + seedAgents;
+    const seedString=`{"seed": "${tempString}"}`;
+    return fetch(url,{
+        method:'POST',
+        headers:{
+            'Content-Type': 'text/plain',
+        },
+        body:seedString
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .catch(error => {
+        throw error.message || 'An error occurred while processing the request.';
+    });
 }
