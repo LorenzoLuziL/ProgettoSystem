@@ -99,14 +99,10 @@ function connectParticipants() {
 
   return domify('<div class="bpp-field-wrapper" style="flex-direction:column;">' +
     '<div class="bpp-properties-entry" ' + 'data-show="show"' + ' >' +
-    '<label for="tortellini">' + "Click to connect all the involved participants" + '</label>' +
+    '<label for="tortellini">' + "Click to connect all the involved participants and create their credentials" + '</label>' +
     '</div>' +
     '<button type="button"  class="btn btn-outline-primary" data-action="connectElement" ><span>Connect </span></button>' +
-    '<p>'+ "" +'</p>'+
-    '<div class="bpp-properties-entry" ' + 'data-show="show"' + '>' +
-    '<label for="tortellini">' + "Click to create the needed credential definitions" + '</label>' +
-    '</div>' +
-    '<button type="button"  class="btn btn-outline-primary" data-action="createCredDef" ><span>Create Credentials</span></button>' +
+
     "</div>");
 }
 
@@ -128,21 +124,17 @@ export default function (group, element, translate, bpmnFactory) {
         html: connectParticipants(),
         modelProperty: "tortellini",
         connectElement: function () {
-
-          return callBack(element.businessObject.id)
-        },
-        createCredDef: function () {
-
+          callBack(element.businessObject.id);
           return createSchema()
         }
       }
-      // entryFactory.textField(translate, {
-      //   id: "spell",
-      //   description: "Apply a black magic spell",
-      //   label: "Spell",
-      //   modelProperty: "spell",
+      /* entryFactory.textField(translate, {
+        id: "spell",
+        description: "Apply a black magic spell",
+        label: "Spell",
+        modelProperty: "spell",
 
-      // })
+      }) */
     );
   }
 
