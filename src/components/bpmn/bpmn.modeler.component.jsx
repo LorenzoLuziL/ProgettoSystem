@@ -65,7 +65,17 @@ class BpmnModelerComponent extends React.Component {
 
 
     });
+    const storedBpmnXml = localStorage.getItem('bpmnXml');
+
+  if (storedBpmnXml) {
+    console.log("prendo la roba dal local storage")
+    // If BPMN XML is found, render the model with it
+    this.openBpmnDiagram(storedBpmnXml)
+  }else{
+    console.log(typeof(emptyBpmn))
+    // Otherwise, render the model with the default empty BPMN
     this.renderModel(emptyBpmn);
+  }
 
   }
 
@@ -178,11 +188,13 @@ class BpmnModelerComponent extends React.Component {
   openBpmnDiagram = (xml) => {
     this.modeler.importXML(xml, (error) => {
       if (error) {
-        return console.log('fail import xml');
+         console.log('fail import xml');
+      }else {
+        console.log('BPMN XML imported successfully.');
+        // Optionally, zoom or perform other actions after successful import
+        // var canvas = this.modeler.get('canvas');
+        // canvas.zoom('fit-viewport');
       }
-      // var canvas = this.modeler.get('canvas');
-
-      //canvas.zoom('fit-viewport');
     });
     
   }
@@ -209,6 +221,7 @@ class BpmnModelerComponent extends React.Component {
 
   startExecution = () => {
     document.querySelector('[data-id="creaComandi"]').addEventListener('click',()=>getXml(this.modeler))
+    document.querySelector('[data-id="saveModel"]').addEventListener('click',()=>saveModel(this.modeler))
     var canvas = this.modeler.get('canvas');
     var overlays = this.modeler.get('overlays');
     //var arrayWithDuplicates = localStorage.getItem("toColour").split(" ");
@@ -283,5 +296,18 @@ function getXml(modeler) {
   // console.log(choreographyTasks);
   createCurl(choreographyTasks);
 
+}
+function saveModel(model){
+  return new Promise((resolve, reject) => {
+    // Get the XML in string format
+    model.saveXML({ format: true }).then(result => {
+      const xml = result.xml;
+      // Store BPMN XML in localStorage
+      localStorage.setItem('bpmnXml', xml);
+      resolve(xml);
+    }).catch(err => {
+      reject(err);
+    });
+  });
 }
 export default BpmnModelerComponent;
