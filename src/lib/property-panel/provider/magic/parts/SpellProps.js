@@ -8,6 +8,7 @@ import { _agents, _offerPropertySchema, _ownershipSchema, _mortgageSchema } from
 import './bootstrap.css';
 import { connectAgents, receiveInvitation, createSchemaAPI, createCredDefAPI } from "../../../../../components/util/APIUtils";
 import SSIPage from "../../../../../components/SSIPage/SSIPage";
+import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
 
 var domify = require('min-dom').domify;
 
@@ -19,7 +20,7 @@ function html(name, messageName, id) {
   //const allConnections = await agentService.getConnections();
 
   var parsedName = name.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '').replace(/ /g, '');
-  var parsedMessageName = messageName.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '').replace(/ /g, '');
+  var parsedMessageName = messageName?.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '').replace(/ /g, '');
   window.localStorage.setItem("request", parsedMessageName + "+" + id);
   console.log("item", localStorage.getItem("request").split("+")[0])
   window.localStorage.setItem("pageOpen", parsedName);
@@ -52,7 +53,7 @@ function callBack(name) {
     for (let i = 0; i < arr.length - 1; i++) {
       for (let j = i + 1; j < arr.length; j++) {
         // output.push(`${arr[i]} - ${arr[j]}`);
-        connectAgents(arr[i])[0].then(res => {
+          connectAgents(arr[i])[0].then(res => {
           receiveInvitation(res, arr[j])
           console.log("invitator:" + arr[i] + "receiver:" + arr[j])
         })
@@ -118,6 +119,7 @@ export default function (group, element, translate, bpmnFactory) {
 
     window.localStorage.setItem("split", '');
     window.localStorage.setItem("request", "null");
+    console.log(group.entries)
     group.entries.push(
       {
         id: "tortellini",
@@ -136,6 +138,7 @@ export default function (group, element, translate, bpmnFactory) {
 
       }) */
     );
+
   }
 
   if (is(element, "bpmn:Participant")) {
@@ -153,22 +156,41 @@ export default function (group, element, translate, bpmnFactory) {
   }
 
   if (is(element, "bpmn:Message")) {
-    window.localStorage.setItem("split", 'active');
 
-    //console.log("element", element.businessObject.name);
-    //fdomify(element.businessObject.name);
-    console.log("element", element.businessObject.name);
-    group.entries.push(
+     group.entries.push(
       {
-        id: "tortellini",
-        html: html(element.parent.businessObject.name, element.businessObject.name, element.businessObject.id),
-        modelProperty: "tortellini",
-
-        //html: fdomify(element.businessObject.name)
+        id: "messaggio",
+        html: domify('<div class="bpp-field-wrapper" style="flex-direction:column;">' +
+        '<div class="bpp-properties-entry" ' + 'data-show="show"' + ' >' +
+        '<label for="messaggio">' + "Click to connect all the involved participants and create their credentials" + '</label>' +
+        '</div>' +
+        '<button type="button"  class="btn btn-outline-primary" data-action="doneMessage" ><span>Message Done </span></button>' +
+    
+        "</div>"),
+        modelProperty: "messaggio",
+        doneMessage: function () {
+          return tempFunction()
+        }
       }
     );
+    
   }
+function tempFunction(){
+   window.localStorage.setItem("split", 'active');
 
+  //console.log("element", element.businessObject.name);
+  //fdomify(element.businessObject.name);
+  console.log("element", element.businessObject.name);
+  group.entries.push(
+    {
+      id: "tortellini",
+      html: html(element.parent.businessObject.name, element.businessObject.name, element.businessObject.id),
+      modelProperty: "tortellini",
+
+      //html: fdomify(element.businessObject.name)
+    }
+  );
+}
 
 
 

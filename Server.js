@@ -11,7 +11,7 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
-app.post('/utenti',(req, res) => {
+
 app.post('/utenti',(req, res) => {
     const agenti = req.body;
     let seedArray=[];
@@ -63,14 +63,22 @@ function createAgents(uniqueObjects,port){
 console.log(uniqueObjects)
   let seedString = "00000000000000000000000000000000";
   seedString = seedString.slice(0, -uniqueObjects.seed.length) + uniqueObjects.seed;
-  const curlCommand = `PORTS='${port} ${port++}' /Users/lauz/Desktop/RepoChorSSi/Librerie_aggiuntive/aries-cloudagent-python/scripts/run_docker start  --wallet-type indy --seed ${seedString} --wallet-key welldone --wallet-name ${uniqueObjects.walletName} --genesis-url http://192.168.1.8:9000/genesis --inbound-transport http 0.0.0.0 ${port} --outbound-transport http --admin 0.0.0.0 ${port++} --admin-insecure-mode --endpoint http://172.18.0.1:8060 --auto-provision --auto-accept-invites --auto-accept-requests --label ${uniqueObjects.label} --tails-server-base-url http://192.168.1.8:6543 --preserve-exchange-records --auto-ping-connection ${uniqueObjects.properties}`;
-  exec(curlCommand, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error executing curl command: ${error.message}`);
-      return;
-    }
-    console.log("chiamata eseguita");
-  });
+  let portPlus=port+1;
+  const curlCommand = `PORTS='${port} ${portPlus}' /home/lollo/Scrivania/Progett/Lib/aries-cloudagent-python/scripts/run_docker start  --wallet-type indy --seed ${seedString} --wallet-key welldone --wallet-name ${uniqueObjects.walletName} --genesis-url http://192.168.1.11:9000/genesis --inbound-transport http 0.0.0.0 ${port} --outbound-transport http --admin 0.0.0.0 ${portPlus} --admin-insecure-mode --endpoint http://172.17.0.1:${port} --auto-provision --auto-accept-invites --auto-accept-requests --label ${uniqueObjects.label} --tails-server-base-url http://192.168.1.11:6543 --preserve-exchange-records --auto-ping-connection ${uniqueObjects.properties}`;
+  const child =spawn(curlCommand,{shell:true,stdio:'inherit'})
+  child.on('close',(code)=>{
+    console.log("child process exited with code ",code);
+  })
+
+  //for some reason this worked only for a few time 
+  
+  // exec(curlCommand,{TTY:false}, (error, stdout, stderr) => {
+  //   if (error) {
+  //     console.error(`Error executing curl command: ${error.message}`);
+  //     return;
+  //   }
+  //   console.log("chiamata eseguita");
+  // });
 }
 function doCurl(seed) {
   return new Promise((resolve, reject) => {
