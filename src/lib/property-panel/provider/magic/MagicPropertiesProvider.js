@@ -14,33 +14,19 @@ function createMagicTabGroups(element, translate) {
     id: "black",
     label: "Self Sovereign Identity",
     entries: [
-      entryFactory.textField(translate, {
-      id: "seed",
-      description: "identificativo dell'agente",
-      label: "Seed",
-      modelProperty: "seed",
-    }),
-    entryFactory.textField(translate, {
-      id: "walletName",
-      description: "campo che serve per il comando di creazione",
-      label: "wallet-name",
-      //modelProperty è quello che vado a mettere ne xml
-      modelProperty: "walletName",
-    }),
-    entryFactory.textField(translate, {
-      id: "label",
-      description: "Fa parte dei comandi della creazione",
-      label: "label",
-      //modelProperty è quello che vado a mettere ne xml
-      modelProperty: "label",
-    }),
-    entryFactory.textField(translate, {
-      id: "prop",
-      description: "Proprieta",
-      label: "prop",
-      //modelProperty è quello che vado a mettere ne xml
-      modelProperty: "prop",
-    }),
+    entryFactory.selectBox(translate,{
+      id:"tipoAgente",
+      description:"Tipologia di agente in SSI",
+      selectOptions: [
+            { value: "", name: "" },
+            { value: "--auto-verify-presentation", name: "--auto-verify-presentation" },
+            { value: "--auto-store-credential --debug-credentials", name: "--auto-store-credential --debug-credentials" },
+            { value: "--auto-verify-presentation --auto-store-credential --debug-credentials", name: "--auto-verify-presentation --auto-store-credential --debug-credentials" },
+            {value:"--auto-store-credential --debug-credentials", name:"--auto-store-credential --debug-credentials"}
+        // Add more options as needed
+      ],
+      modelProperty:"tipoAgente"
+    })
     ]/*  {
       id:"magicButton",
       label: translate("Playground properties"),

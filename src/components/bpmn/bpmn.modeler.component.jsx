@@ -30,7 +30,7 @@ class BpmnModelerComponent extends React.Component {
     super(props);
     this.state = {
       setPageOpen: props.setPageOpen, currentStatus: null, bpmn: props.xml,
-      bpmnString: props.bpmnString, isLoaded: false, arrayWithDuplicates: localStorage.getItem("toColour").split(" ")
+      bpmnString: props.bpmnString, isLoaded: false, arrayWithDuplicates: localStorage.getItem("toColour")?.split(" ")
     }
     var isTrueSet = (localStorage.getItem("pageOpen") === 'true');
     this.state.setPageOpen(isTrueSet);
@@ -70,7 +70,7 @@ class BpmnModelerComponent extends React.Component {
   if (storedBpmnXml) {
     console.log("prendo la roba dal local storage")
     // If BPMN XML is found, render the model with it
-    this.openBpmnDiagram(storedBpmnXml)
+    this.renderModel(storedBpmnXml)
   }else{
     console.log(typeof(emptyBpmn))
     // Otherwise, render the model with the default empty BPMN

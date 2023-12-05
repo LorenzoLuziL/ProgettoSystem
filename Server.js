@@ -17,10 +17,8 @@ app.post('/utenti',(req, res) => {
     agenti.forEach((element)=>{
       let temp={
         id:element.id,
-        seed:element.seed,
-        walletName:element.walletName,
-        label:element.label,
-        properties:element.prop,
+        name:element.name,
+        properties:element.tipoAgente,
       }
         seedArray.push(temp)
     })
@@ -37,7 +35,7 @@ app.post('/utenti',(req, res) => {
     
         return accumulator;
       }, []);
-     
+      console.log("primo log",uniqueObjects);
       creteAgentCommand(uniqueObjects)
     .then(() => {
       let port=8030;
@@ -52,16 +50,16 @@ app.listen(port, () => {
 
 function creteAgentCommand(agenti){
   const promiseChain = agenti.reduce((promise, element) => {
-    return promise.then(() => doCurl(element.seed));
+    return promise.then(() => doCurl(element.id));
   }, Promise.resolve());
 
   return promiseChain;
 }
 function createAgents(uniqueObjects,port){
-console.log(uniqueObjects)
   let seedString = "00000000000000000000000000000000";
-  seedString = seedString.slice(0, -uniqueObjects.seed.length) + uniqueObjects.seed;
-  const curlCommand = `PORTS='${port} ${port++}' /Users/lauz/Desktop/RepoChorSSi/Librerie_aggiuntive/aries-cloudagent-python/scripts/run_docker start  --wallet-type indy --seed ${seedString} --wallet-key welldone --wallet-name ${uniqueObjects.walletName} --genesis-url http://192.168.1.8:9000/genesis --inbound-transport http 0.0.0.0 ${port} --outbound-transport http --admin 0.0.0.0 ${port++} --admin-insecure-mode --endpoint http://172.18.0.1:8060 --auto-provision --auto-accept-invites --auto-accept-requests --label ${uniqueObjects.label} --tails-server-base-url http://192.168.1.8:6543 --preserve-exchange-records --auto-ping-connection ${uniqueObjects.properties}`;
+  seedString = seedString.slice(0, -uniqueObjects.id.length) + uniqueObjects.id;
+  const curlCommand = `PORTS='${port} ${port++}' /Users/lauz/Desktop/RepoChorSSi/Librerie_aggiuntive/aries-cloudagent-python/scripts/run_docker start  --wallet-type indy --seed ${seedString} --wallet-key welldone --wallet-name ${uniqueObjects.name} --genesis-url http://192.168.1.8:9000/genesis --inbound-transport http 0.0.0.0 ${port} --outbound-transport http --admin 0.0.0.0 ${port++} --admin-insecure-mode --endpoint http://172.18.0.1:8060 --auto-provision --auto-accept-invites --auto-accept-requests --label ${uniqueObjects.name} --tails-server-base-url http://192.168.1.8:6543 --preserve-exchange-records --auto-ping-connection ${uniqueObjects.properties}`;
+  console.log(curlCommand);
   exec(curlCommand, (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing curl command: ${error.message}`);

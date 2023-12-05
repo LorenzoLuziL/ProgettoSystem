@@ -12,24 +12,16 @@
       "extends": ["bpmn:BaseElement"],
       "properties": [
         {
-          "name": "seed",
+          "name": "tipoAgente",
           "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "walletName",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "label",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "prop",
-          "isAttr": true,
-          "type": "String"
+          "type": "String",
+          "dropdown": [
+            { "value": "", "name": "" },
+            { "value": "--auto-verify-presentation", "name": "--auto-verify-presentation" },
+            { "value": "--auto-store-credential --debug-credentials", "name": "--auto-store-credential --debug-credentials" },
+            { "value": "--auto-verify-presentation --auto-store-credential --debug-credentials", "name": "--auto-verify-presentation --auto-store-credential --debug-credentials" },
+            {"value":"--auto-store-credential --debug-credentials", "name":"--auto-store-credential --debug-credentials"}
+          ]
         }
       ]
     }
