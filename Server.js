@@ -5,6 +5,7 @@ const port = 9001
 const { exec } = require('child_process');
 const fetch = require('node-fetch');
 const {spawn} = require('child_process');
+const { rejects } = require('assert');
 
 app.use(cors());
 app.use(express.json());
@@ -13,39 +14,88 @@ app.get('/', (req, res) => {
 })
 
 app.post('/utenti',(req, res) => {
-    const agenti = req.body;
-    let seedArray=[];
-    //ottengo solo i campi specifici da ogni agente e mi creo per ogni agente un oggetto che contiene
-    agenti.forEach((element)=>{
-      let temp={
-        id:element.id,
-        name:element.name,
-        properties:element.tipoAgente,
-      }
-        seedArray.push(temp)
-    })
-    // Process the received data as needed
-    res.status(200).json({ message: 'Data received successfully' });
-    const uniqueObjects = seedArray.reduce((accumulator, currentObject) => {
-        // Check if the current object's "seed" property is not in the accumulator
-        const isUnique = !accumulator.some(obj => obj.id === currentObject.id);
     
-        // If unique, add it to the accumulator
-        if (isUnique) {
-          accumulator.push(currentObject);
+    initializeNetwork()
+    .then(()=>{
+      retryFetch(5,5000)
+      .then(()=>{
+        const agenti = req.body;
+      let seedArray=[];
+      //ottengo solo i campi specifici da ogni agente e mi creo per ogni agente un oggetto che contiene
+      agenti.forEach((element)=>{
+        let temp={
+          id:element.id,
+          name:element.name,
+          properties:element.tipoAgente,
         }
-    
-        return accumulator;
-      }, []);
-      console.log("primo log",uniqueObjects);
+          seedArray.push(temp)
+      })
+      // Process the received data as needed
+      res.status(200).json({ message: 'Data received successfully' });
+      const uniqueObjects = seedArray.reduce((accumulator, currentObject) => {
+          // Check if the current object's "seed" property is not in the accumulator
+          const isUnique = !accumulator.some(obj => obj.id === currentObject.id);
+      
+          // If unique, add it to the accumulator
+          if (isUnique) {
+            accumulator.push(currentObject);
+          }
+      
+          return accumulator;
+        }, []);
+        console.log("primo log",uniqueObjects);
+        // // If the GET request is successful, call the function
       creteAgentCommand(uniqueObjects)
-    .then(() => {
-      let port=8030;
-      uniqueObjects.forEach((e)=>{port=port+10;createAgents(e,port)})
+      .then(() => {
+        let port=8030;
+        uniqueObjects.forEach((e)=>{port=port+10;createAgents(e,port)})
+      }) 
     })
-    .catch((error) => console.error('Error:', error));
+  })
+   
 });
 
+function initializeNetwork(){
+  return new Promise((resolve, reject) => {
+  const curlCommand = `/home/lollo/Scrivania/Progett/Lib/von-network/manage down
+    /home/lollo/Scrivania/Progett/Lib/indy-tails-server/docker/manage down
+    /home/lollo/Scrivania/Progett/Lib/von-network/manage up
+    /home/lollo/Scrivania/Progett/Lib/indy-tails-server/docker/manage up`;
+    const child =spawn(curlCommand,{shell:true,stdio:'inherit'})
+    child.on('close',(code)=>{
+      console.log("child process exited with code ",code);
+      if(code<1){
+        resolve(code)
+       
+      }else{
+        reject(code);
+        return;
+      }
+    })
+    
+  })
+}
+function retryFetch(maxRetries, delay) {
+  return new Promise((resolve, reject) => {
+    const fetchWithRetry = (currentRetry) => {
+      const curlCommand = `curl http://localhost:9000`;
+      exec(curlCommand, (error, stdout, stderr) => {
+        if (!error) {
+          console.log('chiamata eseguita');
+          resolve(stdout);
+        } else if (currentRetry < maxRetries) {
+          console.log(`Retrying GET request, attempt ${currentRetry + 1}...`);
+          setTimeout(() => fetchWithRetry(currentRetry + 1), delay);
+        } else {
+          console.error(`Error executing curl command: ${error.message}`);
+          reject(error);
+        }
+      });
+    };
+
+    fetchWithRetry(0);
+  });
+}
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
