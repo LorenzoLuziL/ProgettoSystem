@@ -57,10 +57,10 @@ app.post('/utenti',(req, res) => {
 
 function initializeNetwork(){
   return new Promise((resolve, reject) => {
-  const curlCommand = `/home/lollo/Scrivania/Progett/Lib/von-network/manage down
-    /home/lollo/Scrivania/Progett/Lib/indy-tails-server/docker/manage down
-    /home/lollo/Scrivania/Progett/Lib/von-network/manage up
-    /home/lollo/Scrivania/Progett/Lib/indy-tails-server/docker/manage up`;
+  const curlCommand = `./von-network/manage down
+    ./indy-tails-server/docker/manage down
+    ./von-network/manage up
+    ./indy-tails-server/docker/manage up`;
     const child =spawn(curlCommand,{shell:true,stdio:'inherit'})
     child.on('close',(code)=>{
       console.log("child process exited with code ",code);

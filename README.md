@@ -39,3 +39,10 @@ Once you have correctly changed the script files, you will be able to build up C
 ```bash
 sh start.sh
 ```
+
+
+
+
+todo accomedare
+https://yunxi-zhang-75627.medium.com/hyperledger-aries-aca-py-agents-setup-and-running-tutorials-part-i-i-i-dev-environment-setup-20ab5a32457e
+
