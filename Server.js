@@ -6,6 +6,7 @@ const { exec } = require('child_process');
 const fetch = require('node-fetch');
 const {spawn} = require('child_process');
 const { rejects } = require('assert');
+var localMachineIP = "192.168.0.0"
 
 app.use(cors());
 app.use(express.json());
@@ -21,7 +22,7 @@ app.post('/utenti',(req, res) => {
       .then(()=>{
         const agenti = req.body;
       let seedArray=[];
-      //ottengo solo i campi specifici da ogni agente e mi creo per ogni agente un oggetto che contiene
+      // ottengo solo i campi specifici da ogni agente e mi creo per ogni agente un oggetto che contiene
       agenti.forEach((element)=>{
         let temp={
           id:element.id,
@@ -52,27 +53,36 @@ app.post('/utenti',(req, res) => {
       }) 
     })
   })
-   
 });
 
 function initializeNetwork(){
   return new Promise((resolve, reject) => {
+
+    exec('hostname -I',
+    function (error, stdout, stderr) {
+        console.log('stdout: ' + stdout);
+        console.log('stderr: ' + stderr);
+        if (error !== null) {
+             console.log('exec error: ' + error);
+        }
+        localMachineIP = stdout.split(" ")[0];
+    });
+
   const curlCommand = `./von-network/manage down
     ./indy-tails-server/docker/manage down
     ./von-network/manage up
-    ./indy-tails-server/docker/manage up`;
+    ./indy-tails-server/docker/manage ups`;
+    
     const child =spawn(curlCommand,{shell:true,stdio:'inherit'})
     child.on('close',(code)=>{
       console.log("child process exited with code ",code);
       if(code<1){
         resolve(code)
-       
       }else{
         reject(code);
         return;
       }
     })
-    
   })
 }
 function retryFetch(maxRetries, delay) {
@@ -111,7 +121,7 @@ function createAgents(uniqueObjects,port){
   let seedString = "00000000000000000000000000000000";
   seedString = seedString.slice(0, -uniqueObjects.seed.length) + uniqueObjects.seed;
   let portPlus=port+1;
-  const curlCommand = `PORTS='${port} ${portPlus}' /home/lollo/Scrivania/Progett/Lib/aries-cloudagent-python/scripts/run_docker start  --wallet-type indy --seed ${seedString} --wallet-key welldone --wallet-name ${uniqueObjects.walletName} --genesis-url http://192.168.1.11:9000/genesis --inbound-transport http 0.0.0.0 ${port} --outbound-transport http --admin 0.0.0.0 ${portPlus} --admin-insecure-mode --endpoint http://172.17.0.1:${port} --auto-provision --auto-accept-invites --auto-accept-requests --label ${uniqueObjects.label} --tails-server-base-url http://192.168.1.11:6543 --preserve-exchange-records --auto-ping-connection ${uniqueObjects.properties}`;
+  const curlCommand = `PORTS='${port} ${portPlus}' ./aries-cloudagent-python/scripts/run_docker start  --wallet-type indy --seed ${seedString} --wallet-key welldone --wallet-name ${uniqueObjects.walletName} --genesis-url http://${localMachineIP}:9000/genesis --inbound-transport http 0.0.0.0 ${port} --outbound-transport http --admin 0.0.0.0 ${portPlus} --admin-insecure-mode --endpoint http://172.17.0.1:${port} --auto-provision --auto-accept-invites --auto-accept-requests --label ${uniqueObjects.label} --tails-server-base-url http://${localMachineIP}:6543 --preserve-exchange-records --auto-ping-connection ${uniqueObjects.properties}`;
   const child =spawn(curlCommand,{shell:true,stdio:'inherit'})
   child.on('close',(code)=>{
     console.log("child process exited with code ",code);
