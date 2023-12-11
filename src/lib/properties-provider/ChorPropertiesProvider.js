@@ -1,4 +1,4 @@
-import {BpmnPropertiesProviderModule} from 'bpmn-js-properties-panel';
+import BpmnPropertiesProvider from 'bpmn-js-properties-panel/lib/provider/bpmn/BpmnPropertiesProvider.js';
 import inherits from 'inherits';
 import { is } from 'bpmn-js/lib/util/ModelUtil';
 import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
@@ -7,9 +7,9 @@ import eventDefinitionHelper from 'bpmn-js-properties-panel/lib/helper/EventDefi
 import conditionalProps from 'bpmn-js-properties-panel/lib/provider/camunda/parts/ConditionalProps';
 import messageDefinition from './MessageDefinition';
 
-export default function ChorPropertiesProvider(injector, bpmnFactory) {
+export default function ChorPropertiesProvider(injector, bpmnFactory,translate) {
 
-  injector.invoke(BpmnPropertiesProviderModule, this);
+  injector.invoke(BpmnPropertiesProvider, this);
 
   const superGetTabs = this.getTabs;
 
@@ -28,7 +28,7 @@ export default function ChorPropertiesProvider(injector, bpmnFactory) {
     }
     conditionalProps(detailsGroup, element, bpmnFactory, e => e);
     if (is(element, 'bpmn:Message')) {
-      messageDefinition(detailsGroup, element, bpmnFactory, element.businessObject);
+      messageDefinition(detailsGroup, element, bpmnFactory, element.businessObject,translate);
     }
     return generalTab;
   };
@@ -62,9 +62,10 @@ export default function ChorPropertiesProvider(injector, bpmnFactory) {
 
 }
 
-inherits(ChorPropertiesProvider, BpmnPropertiesProviderModule);
+inherits(ChorPropertiesProvider, BpmnPropertiesProvider);
 ChorPropertiesProvider.$inject = [
   'injector',
-  'bpmnFactory'
+  'bpmnFactory',
+  'translate'
 ];
 

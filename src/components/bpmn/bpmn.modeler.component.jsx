@@ -4,16 +4,19 @@ import 'bpmn-font/dist/css/bpmn-embedded.css';
 import 'chor-js/assets/styles/chor-js.css';
 import { emptyBpmn } from '../../assets/empty.bpmn';
 import propertiesPanelModule from 'bpmn-js-properties-panel';
-import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/bpmn';
+// import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/bpmn';
+// import propertiesProvider from '../../lib/properties-provider'
+
+import propertiesProvider from '../../lib/properties-provider'
+
 import "./bpmn.scss";
 import $ from 'jquery';
 import ChoreoModeler from 'chor-js/lib/Modeler';
 import magicPropertiesProviderModule from '../../lib/property-panel/provider/magic';
 import magicModdleDescriptor from '../../lib/property-panel/descriptors/magic';
+// import chorpropertieProvider from '../../lib/properties-provider/index'
 import { _agents, _mortgageSchema, _offerPropertySchema, _ownershipSchema } from "../../ssi/config";
 import {createCurl} from "../../components/util/APIUtils";
-
-
 class BpmnModelerComponent extends React.Component {
 
   modeler = null;
@@ -50,15 +53,15 @@ class BpmnModelerComponent extends React.Component {
       },
       additionalModules: [
         propertiesPanelModule,
-        //ChorPropertiesProvider,
-        propertiesProviderModule,
+        propertiesProvider,
 
         magicPropertiesProviderModule,
         // magicModdleDescriptor
       ],
       keyboard: {
         bindTo: document
-      },
+      }
+      ,
       moddleExtensions: {
         magic: magicModdleDescriptor
       }

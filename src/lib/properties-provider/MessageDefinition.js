@@ -3,33 +3,35 @@ import elementReferenceProperty from 'bpmn-js-properties-panel/lib/provider/bpmn
 import entryFactory from 'bpmn-js-properties-panel/lib/factory/EntryFactory';
 import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
 
-export default function MessageDefinition(group, element, bpmnFactory, messageEventDefinition) {
-
-  // Technically, the eventDefinitionReference function is only meant for events, however, it works well for our purpose, too.
-  // I currently see no reason to duplicate ~100 lines of code, however, it might break in future versions of the panel-provider
-  group.entries = group.entries.concat(eventDefinitionReference(element, messageEventDefinition, bpmnFactory, {
+export default function MessageDefinition(group, element, bpmnFactory, messageEventDefinition,translate) {
+  console.log(messageEventDefinition)
+  let o={
     label: 'Item Definition',
     elementName: 'item-def',
     elementType: 'bpmn:ItemDefinition',
     referenceProperty: 'itemRef',
     newElementIdPrefix: 'ItemDef_'
-  }));
+  }
+  // Technically, the eventDefinitionReference function is only meant for events, however, it works well for our purpose, too.
+  // I currently see no reason to duplicate ~100 lines of code, however, it might break in future versions of the panel-provider
+  group.entries = group.entries.concat(eventDefinitionReference(element, messageEventDefinition, bpmnFactory, o));
+let b={
+  id: 'Item-Def-element-name',
+  label: 'Item Definition Name',
+  referenceProperty: 'itemRef',
+  modelProperty: 'name',
+  shouldValidate: false
+}
+console.log(b.id)
+  group.entries = group.entries.concat(elementReferenceProperty(element, messageEventDefinition, bpmnFactory, translate,b));
 
-  group.entries = group.entries.concat(elementReferenceProperty(element, messageEventDefinition, bpmnFactory, {
-    id: 'Item-Def-element-name',
-    label: 'Item Definition Name',
-    referenceProperty: 'itemRef',
-    modelProperty: 'name',
-    shouldValidate: false
-  }));
-
-  group.entries = group.entries.concat(createStructureRefTextField());
+  group.entries = group.entries.concat(createStructureRefTextField(translate));
 
 }
 
-function createStructureRefTextField() {
+function createStructureRefTextField(translate) {
   const modelProperty = 'structureRef';
-  let entry = entryFactory.textField({
+  let entry = entryFactory.textField(translate,{
     id: 'structure-ref',
     label: 'Data Structure',
     modelProperty: modelProperty,
