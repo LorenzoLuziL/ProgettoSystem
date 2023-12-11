@@ -11,7 +11,7 @@ A model driven framework for implementing Self-Sovereign Identity on Blockchain
 - Indy Tails Server: https://github.com/bcgov/indy-tails-server
 - Docker: https://docs.docker.com/engine/install/
 
-
+von-network & indy-tails-server folders have to be placed inside the project (ChorSSI) folder
 
 
 ## Starting the Web Application
