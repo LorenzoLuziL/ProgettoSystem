@@ -52,7 +52,7 @@ function callBack(name) {
 
     for (let i = 0; i < arr.length - 1; i++) {
       for (let j = i + 1; j < arr.length; j++) {
-        // output.push(`${arr[i]} - ${arr[j]}`);
+          // output.push(`${arr[i]} - ${arr[j]}`);
           connectAgents(arr[i])[0].then(res => {
           receiveInvitation(res, arr[j])
           console.log("invitator:" + arr[i] + "receiver:" + arr[j])

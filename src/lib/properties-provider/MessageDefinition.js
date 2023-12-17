@@ -24,8 +24,8 @@ let b={
 }
 console.log(b.id)
   group.entries = group.entries.concat(elementReferenceProperty(element, messageEventDefinition, bpmnFactory, translate,b));
-
-  group.entries = group.entries.concat(createStructureRefTextField(translate));
+console.log(group)
+  // group.entries = group.entries.concat(createStructureRefTextField(translate));
 
 }
 

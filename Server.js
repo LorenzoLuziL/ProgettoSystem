@@ -71,7 +71,7 @@ function initializeNetwork(){
   const curlCommand = `./von-network/manage down
     ./indy-tails-server/docker/manage down
     ./von-network/manage up
-    ./indy-tails-server/docker/manage ups`;
+    ./indy-tails-server/docker/manage up`;
     
     const child =spawn(curlCommand,{shell:true,stdio:'inherit'})
     child.on('close',(code)=>{
@@ -91,8 +91,8 @@ function retryFetch(maxRetries, delay) {
       const curlCommand = `curl http://localhost:9000`;
       exec(curlCommand, (error, stdout, stderr) => {
         if (!error) {
-          console.log('chiamata eseguita');
-          resolve(stdout);
+          resolve(stdout)
+          // resolve(stdout);
         } else if (currentRetry < maxRetries) {
           console.log(`Retrying GET request, attempt ${currentRetry + 1}...`);
           setTimeout(() => fetchWithRetry(currentRetry + 1), delay);
@@ -111,21 +111,30 @@ app.listen(port, () => {
 })
 
 function creteAgentCommand(agenti){
+  console.log(agenti)
   const promiseChain = agenti.reduce((promise, element) => {
     return promise.then(() => doCurl(element.id));
   }, Promise.resolve());
 
   return promiseChain;
 }
-function createAgents(uniqueObjects,port){
+async function createAgents(uniqueObjects,port){
+  return new Promise((resolve, reject) => {
   let seedString = "00000000000000000000000000000000";
-  seedString = seedString.slice(0, -uniqueObjects.seed.length) + uniqueObjects.seed;
+  seedString = seedString.slice(0, -uniqueObjects.id.length) + uniqueObjects.id;
   let portPlus=port+1;
-  const curlCommand = `PORTS='${port} ${portPlus}' ./aries-cloudagent-python/scripts/run_docker start  --wallet-type indy --seed ${seedString} --wallet-key welldone --wallet-name ${uniqueObjects.walletName} --genesis-url http://${localMachineIP}:9000/genesis --inbound-transport http 0.0.0.0 ${port} --outbound-transport http --admin 0.0.0.0 ${portPlus} --admin-insecure-mode --endpoint http://172.17.0.1:${port} --auto-provision --auto-accept-invites --auto-accept-requests --label ${uniqueObjects.label} --tails-server-base-url http://${localMachineIP}:6543 --preserve-exchange-records --auto-ping-connection ${uniqueObjects.properties}`;
+  const curlCommand = `PORTS='${port} ${portPlus}' ./aries-cloudagent-python/scripts/run_docker start  --wallet-type indy --seed ${seedString} --wallet-key ${uniqueObjects.name} --wallet-name ${uniqueObjects.name} --genesis-url http://${localMachineIP}:9000/genesis --inbound-transport http 0.0.0.0 ${port} --outbound-transport http --admin 0.0.0.0 ${portPlus} --admin-insecure-mode --endpoint http://172.17.0.1:${port} --auto-provision --auto-accept-invites --auto-accept-requests --label ${uniqueObjects.name} --tails-server-base-url http://${localMachineIP}:6543 --preserve-exchange-records --auto-ping-connection --auto-store-credential --auto-respond-credential-proposal --auto-respond-credential-offer --auto-respond-credential-request --auto-verify-presentation --debug-credentials`;
+  // console.log(curlCommand)
   const child =spawn(curlCommand,{shell:true,stdio:'inherit'})
-  child.on('close',(code)=>{
-    console.log("child process exited with code ",code);
-  })
+  child.on('close', (code) => {
+    console.log("child process exited with code ", code);
+    if (code === 0) {
+      resolve();
+    } else {
+      reject(`Child process exited with code ${code}`);
+    }
+  });
+});
 
   //for some reason this worked only for a few time 
   
@@ -138,24 +147,51 @@ function createAgents(uniqueObjects,port){
   // });
 }
 function doCurl(seed) {
+  let delay=5000;
   return new Promise((resolve, reject) => {
-    let tempString = "00000000000000000000000000000000";
-    const url = 'http://localhost:9000/register';
+    // let tempString = "00000000000000000000000000000000";
+    // const url = 'http://localhost:9000/register';
 
-    tempString = tempString.slice(0, -seed.length) + seed;
-    const seedString = {"seed": "${tempString}"};
-    const curlCommand = `curl --location --request POST '${url}' \
-      --header 'Content-Type: text/plain' \
-      --data-raw '${seedString}'`;
+    // tempString = tempString.slice(0, -seed.length) + seed;
+    // const seedString = {"seed": `${tempString}`};
+    // const curlCommand = `curl --location --request POST '${url}' \
+    //   --header 'Content-Type: text/plain' \
+    //   --data-raw '{"seed": "${tempString}"}'`;
+    // console.log(curlCommand)
+    // exec(curlCommand, (error, stdout, stderr) => {
+    //   if (error) {
+    //     console.error(`Error executing curl command: ${error.message}`);
+    //     reject(error);
+    //     return;
+    //   }
+    //   console.log(stderr);
+    //   console.log(stdout,stdout.includes("Not ready"))
+    //   console.log("chiamata eseguita");
+    //   resolve(stdout);
+    // });
+    const fetchWithRetry = () => {
+      let tempString = "00000000000000000000000000000000";
+      const url = 'http://localhost:9000/register';
+  
+      tempString = tempString.slice(0, -seed.length) + seed;
+      const curlCommand = `curl --location --request POST '${url}' \
+        --header 'Content-Type: text/plain' \
+        --data-raw '{"seed": "${tempString}"}'`;
+      exec(curlCommand, (error, stdout, stderr) => {
+        console.log(error,stdout,stderr)
+        if (!stdout.includes("Not ready")) {
+          resolve(stdout)
+          // resolve(stdout);
+        } else if (!error) {
+          console.log('Retrying curl request...');
+          setTimeout(() => fetchWithRetry(), delay);
+        } else {
+          console.error(`Error executing curl command: ${error.message}`);
+          reject(error);
+        }
+      });
+    };
 
-    exec(curlCommand, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Error executing curl command: ${error.message}`);
-        reject(error);
-        return;
-      }
-      console.log("chiamata eseguita");
-      resolve(stdout);
-    });
+    fetchWithRetry(0);
   });
 }

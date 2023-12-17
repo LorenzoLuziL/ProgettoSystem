@@ -235,8 +235,8 @@ export const _proofPresentation = {
 };
 
 export const _agents = {
-    seller: { agentPort: 8041},
-    registry: { agentPort: 8051, schema: _ownershipSchema },
+    seller: { agentPort: 8051},
+    registry: { agentPort: 8041, schema: _ownershipSchema },
     broker: { agentPort: 8061, schema: _offerPropertySchema, },
     buyer: { agentPort: 8071},
     sellersbank: { agentPort: 8081, schema: _mortgageSchema, },
