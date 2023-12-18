@@ -22,6 +22,11 @@
             { "value": "--auto-verify-presentation --auto-store-credential --debug-credentials", "name": "--auto-verify-presentation --auto-store-credential --debug-credentials" },
             {"value":"--auto-store-credential --debug-credentials", "name":"--auto-store-credential --debug-credentials"}
           ]
+        },
+        {
+          "name":"schemaAttr",
+          "isAttr":true,
+          "type":"String"
         }
       ]
     }

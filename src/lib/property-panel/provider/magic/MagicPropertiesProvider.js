@@ -26,6 +26,11 @@ function createMagicTabGroups(element, translate) {
         // Add more options as needed
       ],
       modelProperty:"tipoAgente"
+    }),
+    entryFactory.textField(translate,{
+      id:"schemaAttr",
+      description:"schema description",
+      modelProperty:"schemaAttr"
     })
     ]/*  {
       id:"magicButton",
