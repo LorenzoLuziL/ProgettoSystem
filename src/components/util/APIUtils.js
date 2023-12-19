@@ -159,6 +159,7 @@ export function receiveInvitation(invitation, receiver) {
 
 
 export function sendOfferAPI(port, body) {
+    console.log(body)
     return request({
         url: "http://localhost:" + port + "/issue-credential/send-offer",
         method: 'POST',

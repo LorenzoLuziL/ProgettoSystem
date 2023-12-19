@@ -28,7 +28,7 @@ export default function ChorPropertiesProvider(injector, bpmnFactory,translate) 
     }
     conditionalProps(detailsGroup, element, bpmnFactory, e => e);
     if (is(element, 'bpmn:Message')) {
-      messageDefinition(detailsGroup, element, bpmnFactory, element.businessObject,translate);
+      // messageDefinition(detailsGroup, element, bpmnFactory, element.businessObject,translate);
     }
     return generalTab;
   };

@@ -16,7 +16,9 @@ import {
   MDBCol,
   MDBCard,
   MDBCardBody,
-  MDBTextArea}
+  MDBTextArea,
+  MDBTable,
+  MDBTableBody}
   from 'mdb-react-ui-kit';
 
 
@@ -98,8 +100,38 @@ class SSIPage extends React.Component {
   }
 
   sendOffer = () => {
-
-    sendOfferAPI(_agents[localStorage.getItem("pageOpen")].agentPort, document.querySelector('#textAreaExample').textContent).then(offer => {
+    const schemaAttr = localStorage.getItem("schemaAttr");
+    if (!schemaAttr) {
+      console.error("Schema attributes not found.");
+      return;
+    }
+  
+    const attributes = schemaAttr.split(";");
+    const credentialPreviewAttributes = attributes.map((attribute, index) => {
+      const value = document.querySelector(`#textArea_${index}`).value;
+      return {
+        "mime-type": "plain/text",
+        "name": attribute,
+        "value": value,
+      };
+    });
+  
+    const offerData = {
+      auto_remove: false,
+      auto_issue: true,
+      auto_offer: true,
+      support_revocation: true,
+      cred_def_id: "<Enter a valid Connection ID>", // Replace with the actual cred_def_id
+      connection_id: this.state.connId, // Use the connection_id from the state or another source
+      credential_preview: {
+        "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview",
+        attributes: credentialPreviewAttributes,
+        predicates: [],
+      },
+      trace: true,
+    };
+console.log(JSON.stringify(offerData,null,2));
+    sendOfferAPI(_agents[localStorage.getItem("pageOpen")].agentPort, JSON.stringify(offerData,null,2)).then(offer => {
       console.log("offer", offer);
       window.localStorage.setItem("toColour", localStorage.getItem("toColour") + " " + localStorage.getItem("request").split("+")[1])
       window.localStorage.setItem("split", '');
@@ -221,6 +253,39 @@ class SSIPage extends React.Component {
 
   }
 
+  renderTableForAttributes = () => {
+    const schemaAttr = localStorage.getItem("schemaAttr");
+    if (!schemaAttr) {
+      return null;
+    }
+
+    const attributes = schemaAttr.split(";");
+    return attributes.map((attribute, index) => (
+      <div key={index} style={{ marginBottom: "20px" }}>
+        <h5 className="fw-normal mb-3 text-body" style={{ color: '#4835d4', width: '100%' }}>{attribute}</h5>
+        <MDBRow>
+          <MDBCol md="6" className="bg-indigo p-3">
+            <MDBTable striped bordered>
+              <MDBTableBody>
+                <tr>
+                  <td>Value:</td>
+                  <td>
+                    <MDBTextArea
+                      label={`Enter ${attribute}`}
+                      size="lg"
+                      id={`textArea_${index}`}
+                      style={{ backgroundColor: 'white', marginTop: '5px', width: '100%' }}
+                      rows={3}
+                    />
+                  </td>
+                </tr>
+              </MDBTableBody>
+            </MDBTable>
+          </MDBCol>
+        </MDBRow>
+      </div>
+    ));
+  };
 
   //({ pageOpen, setPageOpen })
   //const [page, setPage] = useState();
@@ -285,12 +350,14 @@ class SSIPage extends React.Component {
                            <div style={{ width: '100%' }}> <MDBTextArea label='Credential to offer' size='lg' value={JSON.stringify(entry[1].offer,null,4)} id='textAreaExample' 
                             style={{ backgroundColor: 'white', marginTop: '5px', width: '100%' }} rows={18} /> {console.log("uguali",entry[0] )} </div> : 
                             <div style={{ width: '100%' }}></div>)}  */}
-                        <MDBTextArea label='Credential to offer' size='lg' defaultValue={
+
+                        {/* <MDBTextArea label='Credential to offer' size='lg' defaultValue={
                           JSON.stringify(localStorage.getItem("request").split("+")[0] === "offercredential" ? _registryOffer
                             : localStorage.getItem("request").split("+")[0] === "propertyoffer" ? _propertyOffer : _mortgageOffer, null, 4)}
                           id='textAreaExample' style={{ backgroundColor: 'white', marginTop: '5px', width: '100%' }} rows={18} /> 
                         </div>
-                        <div style={{ marginTop: "40px" }}>
+                        <div style={{ marginTop: "40px" }}> */}
+                          {this.renderTableForAttributes()}
                           <MDBBtn color='light' size='lg' type='submit' onClick={this.sendOffer}>Register</MDBBtn>
                         </div>
                       </MDBCol>

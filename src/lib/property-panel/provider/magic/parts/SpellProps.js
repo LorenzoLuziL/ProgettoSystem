@@ -180,7 +180,7 @@ function tempFunction(){
 
   //console.log("element", element.businessObject.name);
   //fdomify(element.businessObject.name);
-  console.log("element", element.businessObject.name);
+  window.localStorage.setItem('schemaAttr',element.businessObject.schemaAttr)
   group.entries.push(
     {
       id: "tortellini",
@@ -190,6 +190,7 @@ function tempFunction(){
       //html: fdomify(element.businessObject.name)
     }
   );
+  
 }
 
 
