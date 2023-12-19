@@ -17,6 +17,9 @@ import magicModdleDescriptor from '../../lib/property-panel/descriptors/magic';
 // import chorpropertieProvider from '../../lib/properties-provider/index'
 import { _agents, _mortgageSchema, _offerPropertySchema, _ownershipSchema } from "../../ssi/config";
 import {createCurl} from "../../components/util/APIUtils";
+
+import { createSchemaAPI, createCredDefAPI, connectAgents, receiveInvitation } from "../util/APIUtils.js";
+
 class BpmnModelerComponent extends React.Component {
 
   modeler = null;
@@ -240,6 +243,8 @@ class BpmnModelerComponent extends React.Component {
         console.log("attivooooo")
         //canvas.addMarker(shape, 'highlight');
 
+        // todo qua
+        // chiamata agli agenti
         var $overlayHtml =
           $('<div class="highlight-overlay">')
             .css({
@@ -295,11 +300,15 @@ function getXml(modeler) {
     const elementType = element.type;
     return elementType === 'bpmn:ChoreographyTask';
   });
-  console.log(choreographyTasks)
-  // console.log(choreographyTasks);
+  console.log(choreographyTasks);
   createCurl(choreographyTasks);
-
+ 
+  retryFetch(1000, 50000, 8040)  // todo numero porta prendere dal modello
+  .then(()=>{
+    createSchema();   // connect agents in the model
+  })
 }
+
 function saveModel(model){
   return new Promise((resolve, reject) => {
     // Get the XML in string format
@@ -313,4 +322,70 @@ function saveModel(model){
     });
   });
 }
+
+function callBack() {
+  try {
+    var arr = Object.entries(_agents).map(item => item[1].agentPort);
+
+    for (let i = 0; i < arr.length - 1; i++) {
+      for (let j = i + 1; j < arr.length; j++) {
+        // output.push(`${arr[i]} - ${arr[j]}`);
+          connectAgents(arr[i])[0].then(res => {
+          receiveInvitation(res, arr[j])
+          console.log("invitator:" + arr[i] + "receiver:" + arr[j])
+        })
+      }
+    }
+
+    // console.log("output",output);
+    //createSchema(_agents.registry.agentPort,_ownershipSchema);
+    /* Object.entries(_agents).forEach(entry => {
+      var port = entry[1].agentPort;
+       connectAgents(port)[0].then(res => {
+        receiveInvitation(res)
+
+      }
+      ) 
+    }); */
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function createSchema() {
+  var arr = Object.entries(_agents).map(item => item[1]);
+  arr.forEach(entry =>{
+    if(entry.schema != undefined){
+      createSchemaAPI(entry.agentPort, entry.schema).then(res => {
+        createCredDefAPI(entry.agentPort, res.schema_id).then( cred => console.log("credential",cred));
+      });
+    }
+  }
+  );
+}
+
+function retryFetch(delay, maxRetries, port) {
+  return new Promise((resolve, reject) => {
+    const fetchWithRetry = (currentRetry) => {
+      const curlCommand = `http://172.17.0.1:`+port;
+      setTimeout(() =>  fetch(curlCommand), delay)
+      .then(() =>
+        fetch(curlCommand)
+      )
+      /*{
+        if (!error) {
+          resolve(stdout)
+        } else if (currentRetry < maxRetries) {
+          console.log(`Retrying GET request, attempt ${currentRetry + 1}...`);
+          setTimeout(() => fetchWithRetry(currentRetry + 1), delay);
+        } else {
+          console.error(`Error executing curl command: ${error.message}`);
+          reject(error);
+        }
+      });*/
+    };
+  });
+}
+
+
 export default BpmnModelerComponent;

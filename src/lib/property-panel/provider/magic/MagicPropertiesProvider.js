@@ -13,7 +13,7 @@ function createMagicTabGroups(element, translate) {
   var blackMagicGroup = {
     id: "black",
     label: "Self Sovereign Identity",
-    entries: [
+    entries: [/*
     entryFactory.selectBox(translate,{
       id:"tipoAgente",
       description:"Tipologia di agente in SSI",
@@ -26,11 +26,26 @@ function createMagicTabGroups(element, translate) {
         // Add more options as needed
       ],
       modelProperty:"tipoAgente"
-    }),
+    }),*/
     entryFactory.textField(translate,{
       id:"schemaAttr",
       description:"schema description",
       modelProperty:"schemaAttr"
+    }),
+    entryFactory.checkbox(translate,{
+      id: '--auto-verify-presentation',
+      label: translate('--auto-verify-presentation'),
+      modelProperty: 'autoVerifyPresentation'
+    }),
+    entryFactory.checkbox(translate,{
+      id: '--auto-store-credential',
+      label: translate('--auto-store-credential'),
+      modelProperty: 'autoStoreCredential'
+    }),
+    entryFactory.checkbox(translate,{
+      id: '--debug-credentials',
+      label: translate('--debug-credentials'),
+      modelProperty: 'debugCredentials'
     })
     ]/*  {
       id:"magicButton",
@@ -69,5 +84,6 @@ export default function MagicPropertiesProvider(propertiesPanel, translate, bpmn
     };
   };
 }
-
+var checkedValue = document.querySelector('.blackMagicGroup'); //.entryFactory.checkbox:checked');
+console.log("checkboxSelected: " +checkedValue);
 MagicPropertiesProvider.$inject = ["propertiesPanel", "translate"];

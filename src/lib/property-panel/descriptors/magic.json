@@ -11,18 +11,7 @@
       "name": "BewitchedStartEvent",
       "extends": ["bpmn:BaseElement"],
       "properties": [
-        {
-          "name": "tipoAgente",
-          "isAttr": true,
-          "type": "String",
-          "dropdown": [
-            { "value": "", "name": "" },
-            { "value": "--auto-verify-presentation", "name": "--auto-verify-presentation" },
-            { "value": "--auto-store-credential --debug-credentials", "name": "--auto-store-credential --debug-credentials" },
-            { "value": "--auto-verify-presentation --auto-store-credential --debug-credentials", "name": "--auto-verify-presentation --auto-store-credential --debug-credentials" },
-            {"value":"--auto-store-credential --debug-credentials", "name":"--auto-store-credential --debug-credentials"}
-          ]
-        },
+      
         {
           "name":"schemaAttr",
           "isAttr":true,
