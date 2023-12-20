@@ -11,7 +11,11 @@
       "name": "BewitchedStartEvent",
       "extends": ["bpmn:BaseElement"],
       "properties": [
-      
+        {
+          "name":"port",
+          "isAttr":true,
+          "type":"String"
+        },
         {
           "name":"schemaAttr",
           "isAttr":true,
