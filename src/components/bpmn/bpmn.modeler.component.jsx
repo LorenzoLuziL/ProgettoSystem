@@ -364,26 +364,29 @@ function createSchema() {
   );
 }
 
-function retryFetch(delay, maxRetries, port) {
+function retryFetch(url, maxRetries, delayBetweenRetries) {
   return new Promise((resolve, reject) => {
     const fetchWithRetry = (currentRetry) => {
-      const curlCommand = `http://172.17.0.1:`+port;
-      setTimeout(() =>  fetch(curlCommand), delay)
-      .then(() =>
-        fetch(curlCommand)
-      )
-      /*{
-        if (!error) {
-          resolve(stdout)
-        } else if (currentRetry < maxRetries) {
-          console.log(`Retrying GET request, attempt ${currentRetry + 1}...`);
-          setTimeout(() => fetchWithRetry(currentRetry + 1), delay);
-        } else {
-          console.error(`Error executing curl command: ${error.message}`);
-          reject(error);
-        }
-      });*/
+      fetch(url)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => resolve(data))
+        .catch(error => {
+          console.error(`Attempt failed. Retries left: ${maxRetries - currentRetry}. Error: ${error.message}`);
+          if (currentRetry < maxRetries) {
+            console.log(`Retrying in ${delayBetweenRetries / 1000} seconds...`);
+            setTimeout(() => fetchWithRetry(currentRetry + 1), delayBetweenRetries);
+          } else {
+            reject(new Error('Max retries reached. Unable to establish connection.'));
+          }
+        });
     };
+
+    fetchWithRetry(0);
   });
 }
 
