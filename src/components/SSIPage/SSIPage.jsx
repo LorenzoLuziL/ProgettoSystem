@@ -121,7 +121,7 @@ class SSIPage extends React.Component {
       auto_issue: true,
       auto_offer: true,
       support_revocation: true,
-      cred_def_id: "<Enter a valid Connection ID>", // Replace with the actual cred_def_id
+      cred_def_id: this.state.credDefId[0], // Replace with the actual cred_def_id
       connection_id: this.state.connId, // Use the connection_id from the state or another source
       credential_preview: {
         "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview",
@@ -130,7 +130,8 @@ class SSIPage extends React.Component {
       },
       trace: true,
     };
-console.log(JSON.stringify(offerData,null,2));
+    console.log(document.querySelector("#textAreaExample").textContent);
+    console.log(JSON.stringify(offerData,null,2));
     sendOfferAPI(_agents[localStorage.getItem("pageOpen")].agentPort, JSON.stringify(offerData,null,2)).then(offer => {
       console.log("offer", offer);
       window.localStorage.setItem("toColour", localStorage.getItem("toColour") + " " + localStorage.getItem("request").split("+")[1])
@@ -351,12 +352,12 @@ console.log(JSON.stringify(offerData,null,2));
                             style={{ backgroundColor: 'white', marginTop: '5px', width: '100%' }} rows={18} /> {console.log("uguali",entry[0] )} </div> : 
                             <div style={{ width: '100%' }}></div>)}  */}
 
-                        {/* <MDBTextArea label='Credential to offer' size='lg' defaultValue={
+                        <MDBTextArea label='Credential to offer' size='lg' defaultValue={
                           JSON.stringify(localStorage.getItem("request").split("+")[0] === "offercredential" ? _registryOffer
                             : localStorage.getItem("request").split("+")[0] === "propertyoffer" ? _propertyOffer : _mortgageOffer, null, 4)}
                           id='textAreaExample' style={{ backgroundColor: 'white', marginTop: '5px', width: '100%' }} rows={18} /> 
                         </div>
-                        <div style={{ marginTop: "40px" }}> */}
+                        <div style={{ marginTop: "40px" }}>
                           {this.renderTableForAttributes()}
                           <MDBBtn color='light' size='lg' type='submit' onClick={this.sendOffer}>Register</MDBBtn>
                         </div>

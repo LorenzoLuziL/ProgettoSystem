@@ -6,7 +6,7 @@ import elementHelper from 'bpmn-js-properties-panel/lib/helper/ElementHelper';
 import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
 import { _agents, _offerPropertySchema, _ownershipSchema, _mortgageSchema } from '../../../../../ssi/config';
 import './bootstrap.css';
-import { connectAgents, receiveInvitation, createSchemaAPI, createCredDefAPI } from "../../../../../components/util/APIUtils";
+import { connectAgents, receiveInvitation, createSchemaAPI, createCredDefAPI,getAgent } from "../../../../../components/util/APIUtils";
 import SSIPage from "../../../../../components/SSIPage/SSIPage";
 import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
 
@@ -84,6 +84,8 @@ function createDef(port, schema) {
 }
 
 function createSchema() {
+  console.log(getAgent());
+  return getAgent();
   var arr = Object.entries(_agents).map(item => item[1]);
   arr.forEach(entry =>{
     if(entry.schema != undefined){
@@ -126,7 +128,7 @@ export default function (group, element, translate, bpmnFactory) {
         html: connectParticipants(),
         modelProperty: "tortellini",
         connectElement: function () {
-          callBack(element.businessObject.id);
+          // callBack(element.businessObject.id);
           return createSchema()
         }
       }
