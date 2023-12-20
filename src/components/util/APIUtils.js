@@ -321,3 +321,11 @@ export function excuteCurl(seedAgents){
         throw error.message || 'An error occurred while processing the request.';
     });
 }
+
+export function getAgent(){
+    console.log("richiamata")
+    return request( {
+        url: "http://localhost:8041/connections",
+        method: 'GET',
+    });
+}

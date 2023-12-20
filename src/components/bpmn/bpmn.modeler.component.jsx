@@ -18,7 +18,7 @@ import magicModdleDescriptor from '../../lib/property-panel/descriptors/magic';
 import { _agents, _mortgageSchema, _offerPropertySchema, _ownershipSchema } from "../../ssi/config";
 import {createCurl} from "../../components/util/APIUtils";
 
-import { createSchemaAPI, createCredDefAPI, connectAgents, receiveInvitation } from "../util/APIUtils.js";
+import { createSchemaAPI, createCredDefAPI, connectAgents, receiveInvitation,getAgent } from "../util/APIUtils.js";
 
 class BpmnModelerComponent extends React.Component {
 
@@ -232,7 +232,7 @@ class BpmnModelerComponent extends React.Component {
     var overlays = this.modeler.get('overlays');
     //var arrayWithDuplicates = localStorage.getItem("toColour").split(" ");
     var arrayWithDuplicates = this.state.arrayWithDuplicates;
-    var uniqueArray = arrayWithDuplicates.filter(function (elem, pos) {
+    var uniqueArray = arrayWithDuplicates?.filter(function (elem, pos) {
       return arrayWithDuplicates.indexOf(elem) == pos;
     })
     console.log("startExecutionCOlor", uniqueArray.length);
@@ -302,10 +302,11 @@ function getXml(modeler) {
   });
   console.log(choreographyTasks);
   createCurl(choreographyTasks);
- 
-  retryFetch(1000, 50000, 8040)  // todo numero porta prendere dal modello
+  console.log("eseguo funzione")
+  retryFetch(10000, 50, 8041)  // todo numero porta prendere dal modello
   .then(()=>{
-    createSchema();   // connect agents in the model
+    callBack();
+    createSchema();
   })
 }
 
@@ -365,27 +366,32 @@ function createSchema() {
 }
 
 function retryFetch(delay, maxRetries, port) {
+  console.log("entro");
+  let options={
+    url:`http://localhost:${port}`
+  }
   return new Promise((resolve, reject) => {
     const fetchWithRetry = (currentRetry) => {
-      const curlCommand = `http://172.17.0.1:`+port;
-      setTimeout(() =>  fetch(curlCommand), delay)
-      .then(() =>
-        fetch(curlCommand)
-      )
-      /*{
-        if (!error) {
-          resolve(stdout)
-        } else if (currentRetry < maxRetries) {
-          console.log(`Retrying GET request, attempt ${currentRetry + 1}...`);
-          setTimeout(() => fetchWithRetry(currentRetry + 1), delay);
-        } else {
-          console.error(`Error executing curl command: ${error.message}`);
-          reject(error);
+
+      getAgent()
+      .then((response)=>{
+        resolve(response)
+      })
+      .catch((error)=>{
+        console.log("attempt error",currentRetry)
+        if(currentRetry<maxRetries){
+          setTimeout(()=>fetchWithRetry(currentRetry+1),delay)
+        }else{
+          reject(new Error("max retrives"))
         }
-      });*/
+      }
+      )
     };
+
+    fetchWithRetry(0);
   });
 }
+
 
 
 export default BpmnModelerComponent;
