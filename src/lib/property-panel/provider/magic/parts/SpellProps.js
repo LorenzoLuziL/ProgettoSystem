@@ -149,7 +149,7 @@ export default function (group, element, translate, bpmnFactory) {
     group.entries.push(
       {
         id: "tortellini",
-        html: "html(element.businessObject.name)",
+        html: "port"+element.businessObject.port,
         modelProperty: "tortellini",
 
         //html: fdomify(element.businessObject.name)

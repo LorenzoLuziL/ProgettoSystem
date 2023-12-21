@@ -8,7 +8,7 @@ var LOW_PRIORITY = 500;
 
 // Create the custom magic tab.
 // The properties are organized in groups.
-function createMagicTabGroups(element, translate,temp) {
+function createMagicTabGroups(element, translate) {
   // Create a group called "Black Magic".
   var blackMagicGroup = {
     id: "black",
@@ -31,6 +31,14 @@ function createMagicTabGroups(element, translate,temp) {
       id:"schemaAttr",
       description:"schema description",
       modelProperty:"schemaAttr"
+    }),
+    entryFactory.textField(translate,{
+      id:"port",
+      description:"DO NOT INSERT VALUE",
+      modelProperty:"port",
+      hidden:function() {
+        return true;
+      }
     }),
     entryFactory.checkbox(translate,{
       id: '--auto-verify-presentation',
@@ -56,7 +64,7 @@ function createMagicTabGroups(element, translate,temp) {
   };
 
   // Add the spell props to the black magic group.
-  spellProps(blackMagicGroup, element, translate,temp);
+  spellProps(blackMagicGroup, element, translate);
 
   return [blackMagicGroup];
 }
@@ -73,7 +81,7 @@ export default function MagicPropertiesProvider(propertiesPanel, translate, bpmn
       var magicTab = {
         id: "magic",
         label: "SSI",
-        groups: createMagicTabGroups(element, translate,temp)
+        groups: createMagicTabGroups(element, translate)
       };
       entries.push(magicTab);
 

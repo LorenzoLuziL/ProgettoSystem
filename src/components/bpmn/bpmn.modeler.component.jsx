@@ -228,6 +228,7 @@ class BpmnModelerComponent extends React.Component {
   startExecution = () => {
     document.querySelector('[data-id="creaComandi"]').addEventListener('click',()=>getXml(this.modeler))
     document.querySelector('[data-id="saveModel"]').addEventListener('click',()=>saveModel(this.modeler))
+    setAgentsPort(this.modeler)
     var canvas = this.modeler.get('canvas');
     var overlays = this.modeler.get('overlays');
     //var arrayWithDuplicates = localStorage.getItem("toColour").split(" ");
@@ -261,6 +262,7 @@ class BpmnModelerComponent extends React.Component {
         });
       }
     });
+    
   }
 
   getDataChild = (res) => {
@@ -311,19 +313,42 @@ function getXml(modeler) {
 }
 
 function saveModel(model){
-  return new Promise((resolve, reject) => {
-    // Get the XML in string format
-    model.saveXML({ format: true }).then(result => {
-      const xml = result.xml;
-      // Store BPMN XML in localStorage
-      localStorage.setItem('bpmnXml', xml);
-      resolve(xml);
-    }).catch(err => {
-      reject(err);
-    });
-  });
+  
+  // return new Promise((resolve, reject) => {
+  //   // Get the XML in string format
+  //   model.saveXML({ format: true }).then(result => {
+  //     const xml = result.xml;
+  //     // Store BPMN XML in localStorage
+  //     localStorage.setItem('bpmnXml', xml);
+  //     resolve(xml);
+  //   }).catch(err => {
+  //     reject(err);
+  //   });
+  // });
 }
-
+function setAgentsPort(model){
+  console.log("sono qui")
+  const elementRegistry = model.get('elementRegistry');
+  const allElements = elementRegistry.getAll();
+  const choreographyTasks = allElements.filter(element => {
+    const elementType = element.type;
+    return elementType === 'bpmn:ChoreographyTask';
+  });
+  const senderRequestBody=[];
+  choreographyTasks.forEach((element)=>{
+            element.businessObject.participantRef.forEach((e)=>{
+                if(! senderRequestBody.some(obj=>obj.id==e.id)){
+                    senderRequestBody.push(e)
+                }
+            })
+    })
+    let port=8040;
+    senderRequestBody.forEach((e)=>{
+      e.port=port;
+      port=port+10;
+    })
+    console.log(senderRequestBody)
+}
 function callBack() {
   try {
     var arr = Object.entries(_agents).map(item => item[1].agentPort);
