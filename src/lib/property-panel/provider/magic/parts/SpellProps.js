@@ -180,21 +180,22 @@ export default function (group, element, translate, bpmnFactory) {
 function tempFunction(){
   let port=element.parent.businessObject.port;
   let schemaAttr=element.businessObject.schemaAttr;
-  if (!schemaAttr) {
-    console.error("Schema attributes not found.");
-    return;
+  if (schemaAttr) {
+    const attributes = schemaAttr.split(";");
+    const credentialPreviewAttributes = attributes.map((attribute, index) => {
+      return attribute
+    });
+    let nomeParticipant=element.parent.businessObject.name.toLowerCase();
+    let schema={
+      attributes: credentialPreviewAttributes,
+      schema_name: getSchemaName(nomeParticipant),
+      schema_version: "1.0",
+    }
+    createSchemaAPI(port,schema)
   }
 
-  const attributes = schemaAttr.split(";");
-  const credentialPreviewAttributes = attributes.map((attribute, index) => {
-    return '"'+attribute+'"'
-  });
-  let temp={
-    attributes: [credentialPreviewAttributes],
-    schema_name: `ownershipSchema`,
-    schema_version: "1.0",
-  }
-  console.log(temp)
+  
+  
   //  window.localStorage.setItem("split", 'active');
 
   //console.log("element", element.businessObject.name);
@@ -213,5 +214,14 @@ function tempFunction(){
 }
 
 
-
+function getSchemaName(elementName){
+  switch(elementName){
+    case "registry":
+      return "ownershipSchema";
+    case "broker":
+      return "offerPropertySchema";
+    case "sellersbank":
+      return "mortgageSchema"
+  }
+}
 }
