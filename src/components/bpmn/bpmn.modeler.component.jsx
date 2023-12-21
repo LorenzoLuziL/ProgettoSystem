@@ -314,17 +314,17 @@ function getXml(modeler) {
 
 function saveModel(model){
   
-  // return new Promise((resolve, reject) => {
-  //   // Get the XML in string format
-  //   model.saveXML({ format: true }).then(result => {
-  //     const xml = result.xml;
-  //     // Store BPMN XML in localStorage
-  //     localStorage.setItem('bpmnXml', xml);
-  //     resolve(xml);
-  //   }).catch(err => {
-  //     reject(err);
-  //   });
-  // });
+  return new Promise((resolve, reject) => {
+    // Get the XML in string format
+    model.saveXML({ format: true }).then(result => {
+      const xml = result.xml;
+      // Store BPMN XML in localStorage
+      localStorage.setItem('bpmnXml', xml);
+      resolve(xml);
+    }).catch(err => {
+      reject(err);
+    });
+  });
 }
 function setAgentsPort(model){
   console.log("sono qui")

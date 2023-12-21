@@ -48,8 +48,7 @@ app.post('/utenti',(req, res) => {
         // // If the GET request is successful, call the function
       creteAgentCommand(uniqueObjects)
       .then(() => {
-        let port=8030;
-        uniqueObjects.forEach((e)=>{port=port+10;createAgents(e,port)})
+        uniqueObjects.forEach((e)=>{createAgents(e)})
       }) 
     })
   })
@@ -118,10 +117,11 @@ function creteAgentCommand(agenti){
 
   return promiseChain;
 }
-async function createAgents(uniqueObjects,port){
+async function createAgents(uniqueObjects){
   return new Promise((resolve, reject) => {
   let seedString = "00000000000000000000000000000000";
   seedString = seedString.slice(0, -uniqueObjects.id.length) + uniqueObjects.id;
+  let port=uniqueObjects.port;
   let portPlus=port+1;
   const curlCommand = `PORTS='${port} ${portPlus}' ./aries-cloudagent-python/scripts/run_docker start  --wallet-type indy --seed ${seedString} --wallet-key ${uniqueObjects.name} --wallet-name ${uniqueObjects.name} --genesis-url http://${localMachineIP}:9000/genesis --inbound-transport http 0.0.0.0 ${port} --outbound-transport http --admin 0.0.0.0 ${portPlus} --admin-insecure-mode --endpoint http://172.17.0.1:${port} --auto-provision --auto-accept-invites --auto-accept-requests --label ${uniqueObjects.name} --tails-server-base-url http://${localMachineIP}:6543 --preserve-exchange-records --auto-ping-connection --auto-store-credential --auto-verify-presentation --debug-credentials`;
   // console.log(curlCommand)
