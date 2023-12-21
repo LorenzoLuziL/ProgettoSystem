@@ -28,6 +28,7 @@ app.post('/utenti',(req, res) => {
           id:element.id,
           name:element.name,
           properties:element.tipoAgente,
+          port:element.port
         }
           seedArray.push(temp)
       })
@@ -48,7 +49,10 @@ app.post('/utenti',(req, res) => {
         // // If the GET request is successful, call the function
       creteAgentCommand(uniqueObjects)
       .then(() => {
-        uniqueObjects.forEach((e)=>{createAgents(e)})
+        uniqueObjects.forEach((e)=>{
+          createAgents(e)
+          // console.log(e)
+        })
       }) 
     })
   })

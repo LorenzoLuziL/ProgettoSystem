@@ -178,7 +178,7 @@ export default function (group, element, translate, bpmnFactory) {
     
   }
 function tempFunction(){
-  let port=element.parent.businessObject.port;
+  let port=element.parent.businessObject.port+1;
   let schemaAttr=element.businessObject.schemaAttr;
   if (schemaAttr) {
     const attributes = schemaAttr.split(";");
@@ -191,25 +191,35 @@ function tempFunction(){
       schema_name: getSchemaName(nomeParticipant),
       schema_version: "1.0",
     }
+    
     createSchemaAPI(port,schema)
+    .then(res=>{
+      createCredDefAPI(port,res.schema.id)
+      .then(cred=>{
+        console.log("creadential",cred)
+        window.localStorage.setItem("split", 'active');
+        window.localStorage.setItem('schemaAttr',element.businessObject.schemaAttr)
+        group.entries.push(
+          {
+            id: "tortellini",
+            html: html(element.parent.businessObject.name, element.businessObject.name, element.businessObject.id),
+            modelProperty: "tortellini",
+      
+            //html: fdomify(element.businessObject.name)
+          }
+        );
+      })
+    })
   }
 
   
   
-  //  window.localStorage.setItem("split", 'active');
+   
 
-  //console.log("element", element.businessObject.name);
-  //fdomify(element.businessObject.name);
-  // window.localStorage.setItem('schemaAttr',element.businessObject.schemaAttr)
-  // group.entries.push(
-  //   {
-  //     id: "tortellini",
-  //     html: html(element.parent.businessObject.name, element.businessObject.name, element.businessObject.id),
-  //     modelProperty: "tortellini",
-
-  //     //html: fdomify(element.businessObject.name)
-  //   }
-  // );
+  // console.log("element", element.businessObject.name);
+  // fdomify(element.businessObject.name);
+  
+  
   
 }
 

@@ -308,7 +308,7 @@ function getXml(modeler) {
   retryFetch(10000, 50, 8041)  // todo numero porta prendere dal modello
   .then(()=>{
     callBack();
-    createSchema();
+    // createSchema();
   })
 }
 
