@@ -178,20 +178,37 @@ export default function (group, element, translate, bpmnFactory) {
     
   }
 function tempFunction(){
-   window.localStorage.setItem("split", 'active');
+  let port=element.parent.businessObject.port;
+  let schemaAttr=element.businessObject.schemaAttr;
+  if (!schemaAttr) {
+    console.error("Schema attributes not found.");
+    return;
+  }
+
+  const attributes = schemaAttr.split(";");
+  const credentialPreviewAttributes = attributes.map((attribute, index) => {
+    return '"'+attribute+'"'
+  });
+  let temp={
+    attributes: [credentialPreviewAttributes],
+    schema_name: `ownershipSchema`,
+    schema_version: "1.0",
+  }
+  console.log(temp)
+  //  window.localStorage.setItem("split", 'active');
 
   //console.log("element", element.businessObject.name);
   //fdomify(element.businessObject.name);
-  window.localStorage.setItem('schemaAttr',element.businessObject.schemaAttr)
-  group.entries.push(
-    {
-      id: "tortellini",
-      html: html(element.parent.businessObject.name, element.businessObject.name, element.businessObject.id),
-      modelProperty: "tortellini",
+  // window.localStorage.setItem('schemaAttr',element.businessObject.schemaAttr)
+  // group.entries.push(
+  //   {
+  //     id: "tortellini",
+  //     html: html(element.parent.businessObject.name, element.businessObject.name, element.businessObject.id),
+  //     modelProperty: "tortellini",
 
-      //html: fdomify(element.businessObject.name)
-    }
-  );
+  //     //html: fdomify(element.businessObject.name)
+  //   }
+  // );
   
 }
 
