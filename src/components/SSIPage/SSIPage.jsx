@@ -352,12 +352,12 @@ class SSIPage extends React.Component {
                             style={{ backgroundColor: 'white', marginTop: '5px', width: '100%' }} rows={18} /> {console.log("uguali",entry[0] )} </div> : 
                             <div style={{ width: '100%' }}></div>)}  */}
 
-                        <MDBTextArea label='Credential to offer' size='lg' defaultValue={
+                        {/* <MDBTextArea label='Credential to offer' size='lg' defaultValue={
                           JSON.stringify(localStorage.getItem("request").split("+")[0] === "offercredential" ? _registryOffer
                             : localStorage.getItem("request").split("+")[0] === "propertyoffer" ? _propertyOffer : _mortgageOffer, null, 4)}
                           id='textAreaExample' style={{ backgroundColor: 'white', marginTop: '5px', width: '100%' }} rows={18} /> 
                         </div>
-                        <div style={{ marginTop: "40px" }}>
+                        <div style={{ marginTop: "40px" }}> */}
                           {this.renderTableForAttributes()}
                           <MDBBtn color='light' size='lg' type='submit' onClick={this.sendOffer}>Register</MDBBtn>
                         </div>
