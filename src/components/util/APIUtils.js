@@ -24,7 +24,7 @@ const request = (options) => {
 
 function createInvitation(port) {
     return request({
-        url: "http://localhost:" + port + "/connections/create-invitation?auto_accept=true&multi_use=true",
+        url: "https://friendly-couscous-r444p94p66qg354v4-"+port+".app.github.dev/connections/create-invitation?auto_accept=true&multi_use=true",
         method: 'POST',
         /* body:{"@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/connections/1.0/invitation",
             "@id": "f833c237-71a4-4566-b77f-ca09075c051e",
@@ -40,7 +40,7 @@ function createInvitation(port) {
 
 export function getConnections(port) {
     return request({
-        url: "http://localhost:" + port + "/connections",
+        url: "https://friendly-couscous-r444p94p66qg354v4-"+port+".app.github.dev/connections",
         method: 'GET',
 
     })
@@ -49,7 +49,7 @@ export function getConnections(port) {
 
 export function getIssuedCredentialAPI(port) {
     return request({
-        url: "http://localhost:" + port + "/issue-credential/records",
+        url: "https://friendly-couscous-r444p94p66qg354v4-"+port+".app.github.dev/issue-credential/records",
         method: 'GET',
 
     })
@@ -57,7 +57,7 @@ export function getIssuedCredentialAPI(port) {
 
 export function getCredentialWalletAPI(port) {
     return request({
-        url: "http://localhost:" + port + "/credentials",
+        url: "https://friendly-couscous-r444p94p66qg354v4-" + port + ".app.github.dev/credentials",
         method: 'GET',
 
     })
@@ -65,7 +65,7 @@ export function getCredentialWalletAPI(port) {
 
 export function getPresentationsAPI(port) {
     return request({
-        url: "http://localhost:" + port + "/present-proof/records",
+        url: "https://friendly-couscous-r444p94p66qg354v4-" + port + ".app.github.dev/present-proof/records",
         method: 'GET',
 
     })
@@ -73,7 +73,7 @@ export function getPresentationsAPI(port) {
 
 export function getSchemaIdAPI(port) {
     return request({
-        url: "http://localhost:" + port + "/schemas/created",
+        url: "https://friendly-couscous-r444p94p66qg354v4-" + port + ".app.github.dev/schemas/created",
         method: 'GET',
 
     })
@@ -81,7 +81,7 @@ export function getSchemaIdAPI(port) {
 
 export function getSchemaDetailsAPI(port, credId) {
     return request({
-        url: "http://localhost:" + port + "/schemas/" + credId,
+        url: "https://friendly-couscous-r444p94p66qg354v4-" + port + ".app.github.dev/schemas/" + credId,
         method: 'GET',
 
     })
@@ -89,7 +89,7 @@ export function getSchemaDetailsAPI(port, credId) {
 
 export function getCredDefIdAPI(port) {
     return request({
-        url: "http://localhost:" + port + "/credential-definitions/created",
+        url: "https://friendly-couscous-r444p94p66qg354v4-" + port + ".app.github.dev/credential-definitions/created",
         method: 'GET',
 
     })
@@ -97,7 +97,7 @@ export function getCredDefIdAPI(port) {
 
 export function getCredDefIdDetailsAPI(port, credId) {
     return request({
-        url: "http://localhost:" + port + "/credential-definitions/" + credId,
+        url: "https://friendly-couscous-r444p94p66qg354v4-" + port + ".app.github.dev/credential-definitions/" + credId,
         method: 'GET',
 
     })
@@ -105,7 +105,7 @@ export function getCredDefIdDetailsAPI(port, credId) {
 
 export function getValidCredentialAPI(port, cred) {
     return request({
-        url: "http://localhost:" + port + "/present-proof/records/" + cred + "/credentials",
+        url: "https://friendly-couscous-r444p94p66qg354v4-" + port + ".app.github.dev/present-proof/records/" + cred + "/credentials",
         method: 'GET',
 
     })
@@ -114,7 +114,7 @@ export function getValidCredentialAPI(port, cred) {
 
 export function getCredDefExchangedAPI(port) {
     return request({
-        url: "http://localhost:" + port + "/issue-credential/records",
+        url: "https://friendly-couscous-r444p94p66qg354v4-" + port + ".app.github.dev/issue-credential/records",
         method: 'GET',
 
     })
@@ -122,7 +122,7 @@ export function getCredDefExchangedAPI(port) {
 
 export function getPresExchangeAPI(port) {
     return request({
-        url: "http://localhost:" + port + "/present-proof/records",
+        url: "https://friendly-couscous-r444p94p66qg354v4-" + port + ".app.github.dev/present-proof/records",
         method: 'GET',
 
     })
@@ -149,7 +149,7 @@ export function receiveInvitation(invitation, receiver) {
 
 /*      if (entry[0] !== invitation.invitation.label) {
  */        return request({
-        url: "http://localhost:" + receiver + "/connections/receive-invitation?auto_accept=true&multi_use=true",
+        url: "https://friendly-couscous-r444p94p66qg354v4-" + receiver + ".app.github.dev/connections/receive-invitation?auto_accept=true&multi_use=true",
         method: 'POST',
         body: JSON.stringify(invitation.invitation)
     });
@@ -161,7 +161,7 @@ export function receiveInvitation(invitation, receiver) {
 export function sendOfferAPI(port, body) {
     console.log(body)
     return request({
-        url: "http://localhost:" + port + "/issue-credential/send-offer",
+        url: "https://friendly-couscous-r444p94p66qg354v4-" + port + ".app.github.dev/issue-credential/send-offer",
         method: 'POST',
         body: body
     })
@@ -170,7 +170,7 @@ export function sendOfferAPI(port, body) {
 
 export function sendProofRequestAPI(port, body) {
     return request({
-        url: "http://localhost:" + port + "/present-proof/send-request",
+        url: "https://friendly-couscous-r444p94p66qg354v4-" + port + ".app.github.dev/present-proof/send-request",
         method: 'POST',
         body: body
     })
@@ -181,7 +181,7 @@ export function sendPresentationAPI(port, presEx, credential) {
     console.log("body", _proofPresentation);
     try {
         return request({
-            url: "http://localhost:" + port + "/present-proof/records/" + presEx + "/send-presentation",
+            url: "https://friendly-couscous-r444p94p66qg354v4-" + port + ".app.github.dev/present-proof/records/" + presEx + "/send-presentation",
             method: 'POST',
             body: JSON.stringify(_proofPresentation, null, 4)
         })
@@ -196,7 +196,7 @@ export function sendPresentationAPI(port, presEx, credential) {
 export function createSchemaAPI(port, body) {
     try {
         return request({
-            url: "http://localhost:" + port + "/schemas",
+            url: "https://friendly-couscous-r444p94p66qg354v4-" + port + ".app.github.dev/schemas",
             method: 'POST',
             body: JSON.stringify(body, null, 4)
         })
@@ -210,7 +210,7 @@ export function createSchemaAPI(port, body) {
 export function acceptOfferAPI(port, credDefExId) {
     console.log("credDefExId", credDefExId)
     return request({
-        url: "http://localhost:" + port + "/issue-credential/records/" + credDefExId + "/send-request",
+        url: "https://friendly-couscous-r444p94p66qg354v4-" + port + ".app.github.dev/issue-credential/records/" + credDefExId + "/send-request",
         method: 'POST'
     })
 }
@@ -224,7 +224,7 @@ export function createCredDefAPI(port, schemaId) {
         "version": "1.0"
     }
     return request({
-        url: "http://localhost:" + port + "/credential-definitions",
+        url: "https://friendly-couscous-r444p94p66qg354v4-" + port + ".app.github.dev/credential-definitions",
         method: 'POST',
         body: JSON.stringify(credDefId)
     })
@@ -240,7 +240,7 @@ export function revokeCredAPI(port, cred, conn) {
         "thread_id": "string"
     }
     return request({
-        url: "http://localhost:" + port + "/revocation/revoke",
+        url: "https://friendly-couscous-r444p94p66qg354v4-" + port + ".app.github.dev/revocation/revoke",
         method: 'POST',
         body: JSON.stringify(body)
     })
@@ -248,7 +248,7 @@ export function revokeCredAPI(port, cred, conn) {
 
 export function checkRevocationAPI(port, credId) {
     return request({
-        url: "http://localhost:" + port + "/credential/revoked/" + credId,
+        url: "https://friendly-couscous-r444p94p66qg354v4-" + port + ".app.github.dev/credential/revoked/" + credId,
         method: 'GET',
 
     })
@@ -272,8 +272,7 @@ export function createCurl(body){
     });
 }
 export function sender(body){
-
-    const url = `http://localhost:9001/utenti`;
+    const url = `https://friendly-couscous-r444p94p66qg354v4-9001.app.github.dev/utenti`;
     
     return fetch(url, {
         method: 'POST',
@@ -301,7 +300,7 @@ export function sendCurl(body){
 }
 export function excuteCurl(seedAgents){
     console.log("mando le curl al server")
-    const url=`http://localhost:9001/curl`
+    const url=`https://friendly-couscous-r444p94p66qg354v4-9001.app.github.dev/curl`
     let tempString="00000000000000000000000000000000"
     tempString = tempString.slice(0, -1) + seedAgents;
     const seedString=`{"seed": "${tempString}"}`;
@@ -325,7 +324,7 @@ export function excuteCurl(seedAgents){
 export function getAgent(){
     console.log("richiamata")
     return request( {
-        url: "http://localhost:8041/connections",
+        url: "https://friendly-couscous-r444p94p66qg354v4-8041.app.github.dev/connections",
         method: 'GET',
     });
 }

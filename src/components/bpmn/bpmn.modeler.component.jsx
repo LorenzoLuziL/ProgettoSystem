@@ -393,7 +393,7 @@ function createSchema() {
 function retryFetch(delay, maxRetries, port) {
   console.log("entro");
   let options={
-    url:`http://localhost:${port}`
+    url:`http://https://friendly-couscous-r444p94p66qg354v4-${port}.app.github.dev`
   }
   return new Promise((resolve, reject) => {
     const fetchWithRetry = (currentRetry) => {

@@ -91,7 +91,7 @@ function initializeNetwork(){
 function retryFetch(maxRetries, delay) {
   return new Promise((resolve, reject) => {
     const fetchWithRetry = (currentRetry) => {
-      const curlCommand = `curl http://localhost:9000`;
+      const curlCommand = `curl http://172.16.5.4:9000`;
       exec(curlCommand, (error, stdout, stderr) => {
         if (!error) {
           resolve(stdout)
@@ -127,7 +127,7 @@ async function createAgents(uniqueObjects){
   seedString = seedString.slice(0, -uniqueObjects.id.length) + uniqueObjects.id;
   let port=uniqueObjects.port;
   let portPlus=port+1;
-  const curlCommand = `PORTS='${port} ${portPlus}' ./aries-cloudagent-python/scripts/run_docker start  --wallet-type indy --seed ${seedString} --wallet-key ${uniqueObjects.name} --wallet-name ${uniqueObjects.name} --genesis-url http://${localMachineIP}:9000/genesis --inbound-transport http 0.0.0.0 ${port} --outbound-transport http --admin 0.0.0.0 ${portPlus} --admin-insecure-mode --endpoint http://172.17.0.1:${port} --auto-provision --auto-accept-invites --auto-accept-requests --label ${uniqueObjects.name} --tails-server-base-url http://${localMachineIP}:6543 --preserve-exchange-records --auto-ping-connection --auto-store-credential --auto-verify-presentation --debug-credentials`;
+  const curlCommand = `PORTS='${port} ${portPlus}' ./aries-cloudagent-python/scripts/run_docker start  --wallet-type indy --seed ${seedString} --wallet-key ${uniqueObjects.name} --wallet-name ${uniqueObjects.name} --genesis-url http://172.16.5.4:9000/genesis --inbound-transport http 0.0.0.0 ${port} --outbound-transport http --admin 0.0.0.0 ${portPlus} --admin-insecure-mode --endpoint http://172.17.0.1:${port} --auto-provision --auto-accept-invites --auto-accept-requests --label ${uniqueObjects.name} --tails-server-base-url http://172.16.5.4:6543 --preserve-exchange-records --auto-ping-connection --auto-store-credential --auto-verify-presentation --debug-credentials`;
   // console.log(curlCommand)
   const child =spawn(curlCommand,{shell:true,stdio:'inherit'})
   child.on('close', (code) => {
@@ -175,7 +175,7 @@ function doCurl(seed) {
     // });
     const fetchWithRetry = () => {
       let tempString = "00000000000000000000000000000000";
-      const url = 'http://localhost:9000/register';
+      const url = 'http://172.16.5.4:9000/register';
   
       tempString = tempString.slice(0, -seed.length) + seed;
       const curlCommand = `curl --location --request POST '${url}' \

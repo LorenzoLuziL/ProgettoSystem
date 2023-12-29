@@ -199,8 +199,17 @@ function tempFunction(){
         console.log("creadential",cred)
         
         window.localStorage.setItem('schemaAttr',element.businessObject.schemaAttr)
-        
-      })
+        window.localStorage.setItem("split", 'active');
+        group.entries.push(
+          {
+            id: "tortellini",
+            html: html(element.parent.businessObject.name, element.businessObject.name, element.businessObject.id),
+            modelProperty: "tortellini",
+
+            //html: fdomify(element.businessObject.name)
+          }
+        );
+            })
     })
   }
 

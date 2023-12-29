@@ -130,7 +130,7 @@ class SSIPage extends React.Component {
       },
       trace: true,
     };
-    console.log(document.querySelector("#textAreaExample").textContent);
+    // console.log(document.querySelector("#textAreaExample").textContent);
     console.log(JSON.stringify(offerData,null,2));
     sendOfferAPI(_agents[localStorage.getItem("pageOpen")].agentPort, JSON.stringify(offerData,null,2)).then(offer => {
       console.log("offer", offer);
