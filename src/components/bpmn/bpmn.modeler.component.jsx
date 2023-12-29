@@ -19,7 +19,7 @@ import { _agents, _mortgageSchema, _offerPropertySchema, _ownershipSchema } from
 import {createCurl} from "../../components/util/APIUtils";
 
 import { createSchemaAPI, createCredDefAPI, connectAgents, receiveInvitation,getAgent } from "../util/APIUtils.js";
-
+let arrayAgenti=[];
 class BpmnModelerComponent extends React.Component {
 
   modeler = null;
@@ -46,6 +46,7 @@ class BpmnModelerComponent extends React.Component {
 
 
   componentDidMount = () => {
+
     this.modeler = new ChoreoModeler({
       container: '#bpmnview',
       keyboard: {
@@ -88,13 +89,13 @@ class BpmnModelerComponent extends React.Component {
 
   LoadParticipant = (participant) => {
     const agentService = require('../../ssi/AgentService');
-    for (var i = 0; i < _agents.length; i++) {
+    for (var i = 0; i < arrayAgenti.length; i++) {
       participant.forEach(part => {
         this.addParticipant(part.name.toLowerCase());
-        if (part.name.toLowerCase() === _agents[i].name) {
-          agentService.getStatus(_agents[i].port).then(response => {
+        if (part.name.toLowerCase() === arrayAgenti[i].name) {
+          agentService.getStatus(arrayAgenti[i].port).then(response => {
             this.setState({
-              //currentStatus: _agents[i].name + "up",
+              //currentStatus: arrayAgenti[i].name + "up",
               currentStatus: response + " up"
             });
             this.addLabel(response);
@@ -308,10 +309,45 @@ function getXml(modeler) {
   retryFetch(10000, 50, 8041)  // todo numero porta prendere dal modello
   .then(()=>{
     callBack();
+    setTimeout(()=>{readSchema(modeler)},1000);
     // createSchema();
   })
 }
-
+function readSchema(modeler){
+  const elementRegistry = modeler.get('elementRegistry');
+  // Get all elements
+  const allElements = elementRegistry.getAll();
+  const choreographyTasks = allElements.filter(element => {
+    const elementType = element.type;
+    return elementType === 'bpmn:ChoreographyTask';
+  });
+  console.log(choreographyTasks)
+  choreographyTasks.forEach((task)=>{
+    let temp=task.businessObject.messageFlowRef;
+    temp.forEach((message)=>{
+      if(message.messageRef.schemaAttr){
+        const attributes = message.messageRef.schemaAttr.split(";");
+      const credentialPreviewAttributes = attributes.map((attribute, index) => {
+        return attribute
+      });
+      let nomeParticipant=message.sourceRef.name.toLowerCase();
+      let schema={
+        attributes: credentialPreviewAttributes,
+        schema_name: getSchemaName(nomeParticipant),
+        schema_version: "1.0",
+      }
+      createSchemaAPI(message.sourceRef.port+1,schema)
+      .then(res=>{
+        createCredDefAPI(message.sourceRef.port+1,res.schema.id)
+        .then(cred=>{
+          console.log("creadential",cred)
+        })
+      })
+    }
+    })
+    
+  })
+}
 function saveModel(model){
   
   return new Promise((resolve, reject) => {
@@ -327,7 +363,7 @@ function saveModel(model){
   });
 }
 function setAgentsPort(model){
-  console.log("sono qui")
+  console.log("setAgentsPort")
   const elementRegistry = model.get('elementRegistry');
   const allElements = elementRegistry.getAll();
   const choreographyTasks = allElements.filter(element => {
@@ -343,15 +379,23 @@ function setAgentsPort(model){
             })
     })
     let port=8040;
+    
     senderRequestBody.forEach((e)=>{
       e.port=port;
       port=port+10;
+      let agente={
+        id:e.id,
+        name:e.name,
+        port:e.port+1,
+      }
+      arrayAgenti.push(agente);
     })
+
     console.log(senderRequestBody)
 }
 function callBack() {
   try {
-    var arr = Object.entries(_agents).map(item => item[1].agentPort);
+    var arr = Object.entries(arrayAgenti).map(item => item[1].port);
 
     for (let i = 0; i < arr.length - 1; i++) {
       for (let j = i + 1; j < arr.length; j++) {
@@ -376,18 +420,6 @@ function callBack() {
   } catch (error) {
     console.log(error);
   }
-}
-
-function createSchema() {
-  var arr = Object.entries(_agents).map(item => item[1]);
-  arr.forEach(entry =>{
-    if(entry.schema != undefined){
-      createSchemaAPI(entry.agentPort, entry.schema).then(res => {
-        createCredDefAPI(entry.agentPort, res.schema_id).then( cred => console.log("credential",cred));
-      });
-    }
-  }
-  );
 }
 
 function retryFetch(delay, maxRetries, port) {
@@ -416,7 +448,29 @@ function retryFetch(delay, maxRetries, port) {
     fetchWithRetry(0);
   });
 }
+export function getAgenti(){
+  return arrayAgenti;
+}
 
+export function getPortByAgentName(name){
+  let port="0000";
+  arrayAgenti.forEach((element)=>{
+    let nome=element.name.toLowerCase()
+    if(nome==name){
+      port=element.port;
+    }
+  })
+  return port;
+}
 
-
+function getSchemaName(elementName){
+  switch(elementName){
+    case "registry":
+      return "ownershipSchema";
+    case "broker":
+      return "offerPropertySchema";
+    case "sellersbank":
+      return "mortgageSchema"
+  }
+}
 export default BpmnModelerComponent;

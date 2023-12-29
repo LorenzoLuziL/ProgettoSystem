@@ -104,6 +104,7 @@ export function getCredDefIdDetailsAPI(port, credId) {
 }
 
 export function getValidCredentialAPI(port, cred) {
+    console.log(port,cred)
     return request({
         url: "https://friendly-couscous-r444p94p66qg354v4-" + port + ".app.github.dev/present-proof/records/" + cred + "/credentials",
         method: 'GET',
@@ -144,7 +145,7 @@ export function receiveInvitation(invitation, receiver) {
 
     //TODO: da qui ciclo nei vari agent presenti nella coreografi 
     // mettere codice per fare in modo prima di creare i vari agent e poi di connetterli
-    var arr = Object.entries(_agents).map(item => item[1].agentPort);
+    // var arr = Object.entries(_agents).map(item => item[1].agentPort);
     //console.log("provaaa", Object.entries(_agents)[i][1].agentPort)
 
 /*      if (entry[0] !== invitation.invitation.label) {

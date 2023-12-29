@@ -1,4 +1,5 @@
 import React, {  } from 'react';
+import { getPortByAgentName } from '../bpmn/bpmn.modeler.component';
 import Form from 'react-bootstrap/Form';
 import "./SSIPage.css";
 //import Popper from "popper.js";
@@ -34,14 +35,18 @@ class SSIPage extends React.Component {
 
   }
   componentDidMount = () => {
-    this.getConnections();
-    this.getCredentialDefinitions();
-    this.getPresExchange();
-    this.getCredDefExchange();
-    this.callCredDef();
+    setTimeout(()=>{
+      this.getConnections();
+      this.getCredentialDefinitions();
+      this.getPresExchange();
+      this.getCredDefExchange();
+      this.callCredDef();
+    },500)
+   
   }
 
   handleConnIdChange = (e) => {
+    console.log(e.target.value)
     this.setState({ connId: e.target.value })
     _registryOffer.connection_id = e.target.value;
     _proofRequest.connection_id = e.target.value;
@@ -51,7 +56,7 @@ class SSIPage extends React.Component {
     _propertyOffer.cred_def_id = document.querySelector('#selectCredDef').textContent.replace(/ /g, '');
     _mortgageOffer.connection_id = e.target.value;
     _mortgageOffer.cred_def_id = document.querySelector('#selectCredDef').textContent.replace(/ /g, '');
-    //_proofRequest.cred_def_id = document.querySelector('#selectCredDef').textContent.replace(/ /g, '');
+    // _proofRequest.cred_def_id = document.querySelector('#selectCredDef').textContent.replace(/ /g, '');
 
   }
 
@@ -73,7 +78,7 @@ class SSIPage extends React.Component {
        credPresExId: e.target.value
      }) */
     this.getValidCredential();
-
+     console.log(this.state.validCred)
     this.setState({
       credPresExIdText: this.state.credPresExId.filter(cred =>
         cred.presentation_exchange_id === e.target.value)
@@ -82,6 +87,7 @@ class SSIPage extends React.Component {
   }
 
   handleValidCred = (e) => {
+   
     this.setState({
       validCredText: this.state.validCred.filter(cred =>
         cred.cred_info.referent === e.target.value)
@@ -89,7 +95,7 @@ class SSIPage extends React.Component {
   }
 
   acceptOffer = () => {
-    acceptOfferAPI(_agents[localStorage.getItem("pageOpen")].agentPort, document.querySelector("#selectCredEx").value.replace(/ /g, '')).then(res => {
+    acceptOfferAPI(getPortByAgentName(localStorage.getItem("pageOpen")), document.querySelector("#selectCredEx").value.replace(/ /g, '')).then(res => {
       console.log("acceptOffer", res);
       window.localStorage.setItem("toColour", localStorage.getItem("toColour") + " " + localStorage.getItem("request").split("+")[1])
       window.localStorage.setItem("split", '');
@@ -132,7 +138,7 @@ class SSIPage extends React.Component {
     };
     // console.log(document.querySelector("#textAreaExample").textContent);
     console.log(JSON.stringify(offerData,null,2));
-    sendOfferAPI(_agents[localStorage.getItem("pageOpen")].agentPort, JSON.stringify(offerData,null,2)).then(offer => {
+    sendOfferAPI(getPortByAgentName(localStorage.getItem("pageOpen")), JSON.stringify(offerData,null,2)).then(offer => {
       console.log("offer", offer);
       window.localStorage.setItem("toColour", localStorage.getItem("toColour") + " " + localStorage.getItem("request").split("+")[1])
       window.localStorage.setItem("split", '');
@@ -144,7 +150,7 @@ class SSIPage extends React.Component {
   }
 
   sendProofRequest = () => {
-    sendProofRequestAPI(_agents[localStorage.getItem("pageOpen")].agentPort, document.querySelector('#textAreaCredDefEx').textContent).then(req => {
+    sendProofRequestAPI(getPortByAgentName(localStorage.getItem("pageOpen")), document.querySelector('#textAreaCredDefEx').textContent).then(req => {
       console.log("Request Proof", req);
       window.localStorage.setItem("toColour", localStorage.getItem("toColour") + " " + localStorage.getItem("request").split("+")[1])
       window.localStorage.setItem("split", '');
@@ -154,7 +160,7 @@ class SSIPage extends React.Component {
   }
 
   sendPresentation = () => {
-    sendPresentationAPI(_agents[localStorage.getItem("pageOpen")].agentPort, document.querySelector('#selectPresEx').value.replace(/ /g, ''), document.querySelector('#selectValidCred').value.replace(/ /g, '')).then(req => {
+    sendPresentationAPI(getPortByAgentName(localStorage.getItem("pageOpen")), document.querySelector('#selectPresEx').value.replace(/ /g, ''), document.querySelector('#selectValidCred').value.replace(/ /g, '')).then(req => {
       console.log("Verified Credential", req);
       window.localStorage.setItem("toColour", localStorage.getItem("toColour") + " " + localStorage.getItem("request").split("+")[1])
       window.localStorage.setItem("split", '');
@@ -165,7 +171,8 @@ class SSIPage extends React.Component {
   }
 
   getConnections = () => {
-    getConnections(_agents[localStorage.getItem("pageOpen")].agentPort).then(response =>
+    console.log(getPortByAgentName(localStorage.getItem("pageOpen")))
+    getConnections(getPortByAgentName(localStorage.getItem("pageOpen"))).then(response =>
       this.setState({
         agentConnections: response.results.filter(connection => connection.state === 'active')
       })
@@ -211,7 +218,7 @@ class SSIPage extends React.Component {
 
   getCredentialDefinitions = () => {
 
-    getCredDefIdAPI(_agents[localStorage.getItem("pageOpen")].agentPort).then(response =>
+    getCredDefIdAPI(getPortByAgentName(localStorage.getItem("pageOpen"))).then(response =>
       this.setState({
         credDefId: response.credential_definition_ids
       })
@@ -220,7 +227,7 @@ class SSIPage extends React.Component {
   }
 
   getCredDefExchange = () => {
-    getCredDefExchangedAPI(_agents[localStorage.getItem("pageOpen")].agentPort).then(response => {
+    getCredDefExchangedAPI(getPortByAgentName(localStorage.getItem("pageOpen"))).then(response => {
       // console.log("response",response)
 
       this.setState({
@@ -232,7 +239,7 @@ class SSIPage extends React.Component {
   }
 
   getPresExchange = () => {
-    getPresExchangeAPI(_agents[localStorage.getItem("pageOpen")].agentPort).then(response => {
+    getPresExchangeAPI(getPortByAgentName(localStorage.getItem("pageOpen"))).then(response => {
       console.log("response", response)
 
       this.setState({
@@ -243,9 +250,10 @@ class SSIPage extends React.Component {
   }
 
   getValidCredential = () => {
-    getValidCredentialAPI(_agents[localStorage.getItem("pageOpen")].agentPort, document.querySelector('#selectPresEx').value.replace(/ /g, '')).then(response => {
-      console.log("validCred", response)
-
+    console.log("getValidCredential")
+    getValidCredentialAPI(getPortByAgentName(localStorage.getItem("pageOpen")), document.querySelector('#selectPresEx').value.replace(/ /g, '')).then(response => {
+      console.log("validCred", getPortByAgentName(localStorage.getItem("pageOpen")))
+     
       this.setState({
         validCred: response
       })
@@ -469,7 +477,7 @@ class SSIPage extends React.Component {
 
         </MDBContainer>
       );
-      case "presentproof": return (
+      case "presentproof": return  (
         <MDBContainer fluid className='h-custom' style={{ width: '100%', marginTop: '50px' }} >
 
           <MDBRow className='d-flex justify-content-center align-items-center h-100' style={{ width: '110%' }}>
@@ -504,11 +512,12 @@ class SSIPage extends React.Component {
                       <div style={{ width: '100%', marginTop: "5px" }}>
                         <FloatingLabel controlId="floatingSelect" label="Select a valid Credential" style={{}}>
                           <Form.Select aria-label='mecojoni' id="selectValidCred" size="lg" onChange={this.handleValidCred} style={{}} >
-                            <option value="" hidden></option>
-                            {this.state.validCred != null ? this.state.validCred.length >=1 ? this.state.validCred.map((entry) =>
+                            {console.log("askdnaskjf ",this.state.validCred)}
+                            {/* <option value="" hidden></option>
+                            {this.state.validCred != null ? this.state.validCred.length >=1 ? this.state.validCred.map((entry) => 
                               <option key={entry.cred_info.referent} value={entry.cred_info.referent}>
                                 {entry.cred_info.referent}</option>) : <option value={this.state.validCred != null ? this.state.validCred[0].cred_info.referent : " "}>
-                              {this.state.validCred != null ? this.state.validCred[0].cred_info.referent : " "}</option> : <option value=' '>nada </option>}
+                              {this.state.validCred != null ? this.state.validCred[0].cred_info.referent : " "}</option> : <option value=' '>nada </option>} */}
                           </Form.Select>
                         </FloatingLabel>
                       </div>

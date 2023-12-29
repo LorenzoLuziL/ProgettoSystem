@@ -9,7 +9,7 @@ import './bootstrap.css';
 import { connectAgents, receiveInvitation, createSchemaAPI, createCredDefAPI,getAgent } from "../../../../../components/util/APIUtils";
 import SSIPage from "../../../../../components/SSIPage/SSIPage";
 import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
-
+import { getPortByAgentName } from "../../../../../components/bpmn/bpmn.modeler.component";
 var domify = require('min-dom').domify;
 
 const [schema, setSchema] = ([]);
@@ -33,7 +33,7 @@ function html(name, messageName, id) {
    } */
 
   console.log(name.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '').replace(/ /g, ''));
-  var url = "http://localhost:" + _agents[parsedName].intPort;
+  var url = "http://https://friendly-couscous-r444p94p66qg354v4-"+getPortByAgentName(parsedName)+".app.github.dev";
 
   return domify('<div class="bpp-field-getCurrentUser(_agents[parsedName].agentPort);wrapper"' +
     '<div class="bpp-properties-entry" ' + 'data-show="show"' + '>' +
@@ -46,35 +46,35 @@ function html(name, messageName, id) {
 };
 
 
-function callBack(name) {
-  try {
-    var arr = Object.entries(_agents).map(item => item[1].agentPort);
+// function callBack(name) {
+//   try {
+//     var arr = Object.entries(_agents).map(item => item[1].agentPort);
 
-    for (let i = 0; i < arr.length - 1; i++) {
-      for (let j = i + 1; j < arr.length; j++) {
-          // output.push(`${arr[i]} - ${arr[j]}`);
-          connectAgents(arr[i])[0].then(res => {
-          receiveInvitation(res, arr[j])
-          console.log("invitator:" + arr[i] + "receiver:" + arr[j])
-        })
-      }
-    }
+//     for (let i = 0; i < arr.length - 1; i++) {
+//       for (let j = i + 1; j < arr.length; j++) {
+//           // output.push(`${arr[i]} - ${arr[j]}`);
+//           connectAgents(arr[i])[0].then(res => {
+//           receiveInvitation(res, arr[j])
+//           console.log("invitator:" + arr[i] + "receiver:" + arr[j])
+//         })
+//       }
+//     }
 
-    // console.log("output",output);
-    //createSchema(_agents.registry.agentPort,_ownershipSchema);
-    /* Object.entries(_agents).forEach(entry => {
-      var port = entry[1].agentPort;
-       connectAgents(port)[0].then(res => {
-        receiveInvitation(res)
+//     // console.log("output",output);
+//     //createSchema(_agents.registry.agentPort,_ownershipSchema);
+//     /* Object.entries(_agents).forEach(entry => {
+//       var port = entry[1].agentPort;
+//        connectAgents(port)[0].then(res => {
+//         receiveInvitation(res)
 
-      }
-      ) 
-    }); */
-    window.localStorage.setItem("toColour", name);
-  } catch (error) {
-    console.log(error);
-  }
-}
+//       }
+//       ) 
+//     }); */
+//     window.localStorage.setItem("toColour", name);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
 function createDef(port, schema) {
   createCredDefAPI(port, schema).then(cred => {
@@ -83,20 +83,20 @@ function createDef(port, schema) {
   });
 }
 
-function createSchema() {
-  console.log(getAgent());
-  return getAgent();
-  var arr = Object.entries(_agents).map(item => item[1]);
-  arr.forEach(entry =>{
-    if(entry.schema != undefined){
-      createSchemaAPI(entry.agentPort, entry.schema).then(res => {
-        createCredDefAPI(entry.agentPort, res.schema_id).then( cred => console.log("credential",cred));
-      });
-    }
-  }
-  );
+// function createSchema() {
+//   console.log(getAgent());
+//   return getAgent();
+//   var arr = Object.entries(_agents).map(item => item[1]);
+//   arr.forEach(entry =>{
+//     if(entry.schema != undefined){
+//       createSchemaAPI(entry.agentPort, entry.schema).then(res => {
+//         createCredDefAPI(entry.agentPort, res.schema_id).then( cred => console.log("credential",cred));
+//       });
+//     }
+//   }
+//   );
 
-}
+// }
 
 function connectParticipants() {
 
@@ -129,7 +129,7 @@ export default function (group, element, translate, bpmnFactory) {
         modelProperty: "tortellini",
         connectElement: function () {
           // callBack(element.businessObject.id);
-          return createSchema()
+          return 
         }
       }
       /* entryFactory.textField(translate, {
@@ -181,39 +181,41 @@ function tempFunction(){
   let port=element.parent.businessObject.port+1;
   let schemaAttr=element.businessObject.schemaAttr;
   if (schemaAttr) {
-    const attributes = schemaAttr.split(";");
-    const credentialPreviewAttributes = attributes.map((attribute, index) => {
-      return attribute
-    });
-    let nomeParticipant=element.parent.businessObject.name.toLowerCase();
-    let schema={
-      attributes: credentialPreviewAttributes,
-      schema_name: getSchemaName(nomeParticipant),
-      schema_version: "1.0",
-    }
+  //   console.log("schema presente")
+  //   const attributes = schemaAttr.split(";");
+  //   const credentialPreviewAttributes = attributes.map((attribute, index) => {
+  //     return attribute
+  //   });
+  //   let nomeParticipant=element.parent.businessObject.name.toLowerCase();
+  //   let schema={
+  //     attributes: credentialPreviewAttributes,
+  //     schema_name: getSchemaName(nomeParticipant),
+  //     schema_version: "1.0",
+  //   }
     
-    createSchemaAPI(port,schema)
-    .then(res=>{
-      createCredDefAPI(port,res.schema.id)
-      .then(cred=>{
-        console.log("creadential",cred)
+  //   createSchemaAPI(port,schema)
+  //   .then(res=>{
+  //     createCredDefAPI(port,res.schema.id)
+  //     .then(cred=>{
+  //       console.log("creadential",cred)
         
         window.localStorage.setItem('schemaAttr',element.businessObject.schemaAttr)
-        window.localStorage.setItem("split", 'active');
-        group.entries.push(
-          {
-            id: "tortellini",
-            html: html(element.parent.businessObject.name, element.businessObject.name, element.businessObject.id),
-            modelProperty: "tortellini",
+  //       window.localStorage.setItem("split", 'active');
+  //       group.entries.push(
+  //         {
+  //           id: "tortellini",
+  //           html: html(element.parent.businessObject.name, element.businessObject.name, element.businessObject.id),
+  //           modelProperty: "tortellini",
 
-            //html: fdomify(element.businessObject.name)
-          }
-        );
-            })
-    })
+  //           //html: fdomify(element.businessObject.name)
+  //         }
+  //       );
+  //           })
+  //   })
   }
 
   window.localStorage.setItem("split", 'active');
+
   group.entries.push(
     {
       id: "tortellini",
@@ -224,14 +226,13 @@ function tempFunction(){
     }
   );
    
-
+  // }
   // console.log("element", element.businessObject.name);
   // fdomify(element.businessObject.name);
   
   
   
 }
-
 
 function getSchemaName(elementName){
   switch(elementName){
