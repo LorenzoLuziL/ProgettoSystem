@@ -14,10 +14,15 @@
         {
           "name":"port",
           "isAttr":true,
-          "type":"String"
+          "type":"Number"
         },
         {
           "name":"schemaAttr",
+          "isAttr":true,
+          "type":"String"
+        },
+        {
+          "name":"nomeSchemaAttr",
           "isAttr":true,
           "type":"String"
         }

@@ -6,7 +6,7 @@ import elementHelper from 'bpmn-js-properties-panel/lib/helper/ElementHelper';
 import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
 import { _agents, _offerPropertySchema, _ownershipSchema, _mortgageSchema } from '../../../../../ssi/config';
 import './bootstrap.css';
-import { connectAgents, receiveInvitation, createSchemaAPI, createCredDefAPI,getAgent } from "../../../../../components/util/APIUtils";
+import { connectAgents, receiveInvitation, createSchemaAPI, createCredDefAPI,getAgent,createCurl } from "../../../../../components/util/APIUtils";
 import SSIPage from "../../../../../components/SSIPage/SSIPage";
 import { LocalConvenienceStoreOutlined } from "@mui/icons-material";
 import { getPortByAgentName } from "../../../../../components/bpmn/bpmn.modeler.component";
@@ -104,11 +104,26 @@ function connectParticipants() {
     '<div class="bpp-properties-entry" ' + 'data-show="show"' + ' >' +
     '<label for="tortellini">' + "Click to connect all the involved participants and create their credentials" + '</label>' +
     '</div>' +
-    '<button type="button"  class="btn btn-outline-primary" data-action="connectElement" ><span>Connect </span></button>' +
+    '<button type="button"  class="btn btn-outline-primary" data-action="connectElement" data-id="creaComandi"><span>Connect </span></button>' +
 
     "</div>");
 }
-
+function funzioneTemporanea(element){
+  const allElements=element.parent.children;
+  const choreographyTasks = allElements.filter(element => {
+    const elementType = element.type;
+    return elementType === 'bpmn:ChoreographyTask';
+  });
+  console.log(choreographyTasks);
+  createCurl(choreographyTasks);
+  console.log("eseguo funzione")
+  retryFetch(10000, 50, 8041)  // todo numero porta prendere dal modello
+  .then(()=>{
+    callBack();
+    setTimeout(()=>{readSchema(element)},1000);
+    // createSchema();
+  })
+}
 export default function (group, element, translate, bpmnFactory) {
   // Only return an entry, if the currently selected
   // element is a start event.
@@ -128,7 +143,7 @@ export default function (group, element, translate, bpmnFactory) {
         html: connectParticipants(),
         modelProperty: "tortellini",
         connectElement: function () {
-          // callBack(element.businessObject.id);
+          funzioneTemporanea(element);
           return 
         }
       }
@@ -158,7 +173,13 @@ export default function (group, element, translate, bpmnFactory) {
   }
 
   if (is(element, "bpmn:Message")) {
-
+    group.entries.push(
+      entryFactory.textField(translate,{
+        id:"nomeSchemaAttr",
+        description:"schema description",
+        modelProperty:"nomeSchemaAttr"
+      }),
+    )
      group.entries.push(
       {
         id: "messaggio",
@@ -175,11 +196,13 @@ export default function (group, element, translate, bpmnFactory) {
         }
       }
     );
+   
     
   }
 function tempFunction(){
   let port=element.parent.businessObject.port+1;
   let schemaAttr=element.businessObject.schemaAttr;
+  console.log(element)
   if (schemaAttr) {
   //   console.log("schema presente")
   //   const attributes = schemaAttr.split(";");
@@ -198,7 +221,7 @@ function tempFunction(){
   //     createCredDefAPI(port,res.schema.id)
   //     .then(cred=>{
   //       console.log("creadential",cred)
-        
+        window.localStorage.setItem('nomeSchemaAttr',element.businessObject.nomeSchemaAttr);
         window.localStorage.setItem('schemaAttr',element.businessObject.schemaAttr)
   //       window.localStorage.setItem("split", 'active');
   //       group.entries.push(
@@ -226,7 +249,7 @@ function tempFunction(){
     }
   );
    
-  // }
+  
   // console.log("element", element.businessObject.name);
   // fdomify(element.businessObject.name);
   
@@ -244,4 +267,92 @@ function getSchemaName(elementName){
       return "mortgageSchema"
   }
 }
+}
+function retryFetch(delay, maxRetries, port) {
+  console.log("entro");
+  let options={
+    url:`http://https://friendly-couscous-r444p94p66qg354v4-${port}.app.github.dev`
+  }
+  return new Promise((resolve, reject) => {
+    const fetchWithRetry = (currentRetry) => {
+
+      getAgent()
+      .then((response)=>{
+        resolve(response)
+      })
+      .catch((error)=>{
+        console.log("attempt error",currentRetry)
+        if(currentRetry<maxRetries){
+          setTimeout(()=>fetchWithRetry(currentRetry+1),delay)
+        }else{
+          reject(new Error("max retrives"))
+        }
+      }
+      )
+    };
+
+    fetchWithRetry(0);
+  });
+}
+function callBack() {
+  try {
+    var arr = Object.entries(JSON.parse(localStorage.getItem("agents"))).map(item => Number(item[1].port));
+    console.log(arr)
+    for (let i = 0; i < arr.length - 1; i++) {
+      for (let j = i + 1; j < arr.length; j++) {
+        // output.push(`${arr[i]} - ${arr[j]}`);
+          connectAgents(arr[i])[0].then(res => {
+          receiveInvitation(res, arr[j])
+          console.log("invitator:" + arr[i] + "receiver:" + arr[j])
+        })
+      }
+    }
+
+    // console.log("output",output);
+    //createSchema(_agents.registry.agentPort,_ownershipSchema);
+    /* Object.entries(_agents).forEach(entry => {
+      var port = entry[1].agentPort;
+       connectAgents(port)[0].then(res => {
+        receiveInvitation(res)
+
+      }
+      ) 
+    }); */
+  } catch (error) {
+    console.log(error);
+  }
+}
+function readSchema(element){
+  const allElements=element.parent.children;
+  const choreographyTasks = allElements.filter(element => {
+    const elementType = element.type;
+    return elementType === 'bpmn:ChoreographyTask';
+  });
+  console.log(choreographyTasks)
+  choreographyTasks.forEach((task)=>{
+    let temp=task.businessObject.messageFlowRef;
+    temp.forEach((message)=>{
+      if(message.messageRef.schemaAttr){
+        const attributes = message.messageRef.schemaAttr.split(";");
+      const credentialPreviewAttributes = attributes.map((attribute, index) => {
+        return attribute
+      });
+      let nomeParticipant=message.sourceRef.name.toLowerCase();
+      let schema={
+        attributes: credentialPreviewAttributes,
+        schema_name: message.messageRef.nomeSchemaAttr,
+        schema_version: "1.0",
+      }
+
+      createSchemaAPI(Number(message.sourceRef.port)+1,schema)
+      .then(res=>{
+        createCredDefAPI(Number(message.sourceRef.port)+1,res.schema.id)
+        .then(cred=>{
+          console.log("creadential",cred)
+        })
+      })
+    }
+    })
+    
+  })
 }
