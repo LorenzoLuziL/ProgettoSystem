@@ -40,21 +40,21 @@ function createMagicTabGroups(element, translate) {
         return true;
       }
     }),
-    entryFactory.checkbox(translate,{
-      id: '--auto-verify-presentation',
-      label: translate('--auto-verify-presentation'),
-      modelProperty: 'autoVerifyPresentation'
-    }),
-    entryFactory.checkbox(translate,{
-      id: '--auto-store-credential',
-      label: translate('--auto-store-credential'),
-      modelProperty: 'autoStoreCredential'
-    }),
-    entryFactory.checkbox(translate,{
-      id: '--debug-credentials',
-      label: translate('--debug-credentials'),
-      modelProperty: 'debugCredentials'
-    })
+    // entryFactory.checkbox(translate,{
+    //   id: '--auto-verify-presentation',
+    //   label: translate('--auto-verify-presentation'),
+    //   modelProperty: 'autoVerifyPresentation'
+    // }),
+    // entryFactory.checkbox(translate,{
+    //   id: '--auto-store-credential',
+    //   label: translate('--auto-store-credential'),
+    //   modelProperty: 'autoStoreCredential'
+    // }),
+    // entryFactory.checkbox(translate,{
+    //   id: '--debug-credentials',
+    //   label: translate('--debug-credentials'),
+    //   modelProperty: 'debugCredentials'
+    // })
     ]/*  {
       id:"magicButton",
       label: translate("Playground properties"),

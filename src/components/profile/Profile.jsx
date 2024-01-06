@@ -14,7 +14,7 @@ import {
     getCredDefIdAPI, getCredDefIdDetailsAPI, getCredentialWalletAPI,
     getSchemaIdAPI, getSchemaDetailsAPI, getIssuedCredentialAPI, revokeCredAPI, checkRevocationAPI, getPresentationsAPI
 } from "../../components/util/APIUtils";
-import { _agents } from "../../ssi/config";
+
 import { values } from "min-dash";
 import { ProSidebarProvider, Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import Card from 'react-bootstrap/Card';
@@ -39,13 +39,14 @@ const Profile = (props) => {
 
 
     useEffect(() => {
-        getData();
+        getData()
 
-        //getAllModels();
+        // getAllModels();
     }, [])
 
 
     function getData(value) {
+       
         if (value === undefined || "") {
             value = 8041;
         }
@@ -64,7 +65,7 @@ const Profile = (props) => {
             getSchemaDetailsAPI(value, res.schema_ids[0]).then(res =>
                 setSchema(res.schema))
         )
-
+               
         getCredentialWalletAPI(value).then(res => {
             setCredWallet(res.results);
             var cred = res.results.map(entry => entry.referent)[0];
@@ -93,9 +94,12 @@ const Profile = (props) => {
     };
 
     function revokeIssuedCred(cred, conn) {
-
+        console.log(cred,conn,value)
+        if(!value){
+            revokeCredAPI("8041", cred, conn).then(res => console.log("revoked", res))
+        }else{
         revokeCredAPI(value, cred, conn).then(res => console.log("revoked", res))
-
+        }
     }
 
     function checkRevocation(credId) {
@@ -232,4 +236,3 @@ const Profile = (props) => {
 }
 
 export default Profile;
-

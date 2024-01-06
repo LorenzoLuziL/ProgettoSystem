@@ -14,7 +14,6 @@ function Menu({ menuOpen, setMenuOpen }) {
                 <Link to="/profile" style={{ color: '#fff', textDecoration: 'none' }}>
                     <li onClick={() => setMenuOpen(false)}>Profile</li>
                 </Link>
-                    <li  data-id="creaComandi">creaComandi</li>
                     <li data-id="saveModel">Save Model</li>
             </ul>
         </div>

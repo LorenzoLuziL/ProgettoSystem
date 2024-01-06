@@ -25,6 +25,18 @@
           "name":"nomeSchemaAttr",
           "isAttr":true,
           "type":"String"
+        },
+        {
+          "name": "typeOfMessage",
+          "isAttr": true,
+          "type": "String",
+          "enum": [
+            "",
+            "offerMessage",
+            "acceptMessage",
+            "proofrequestMessage",
+            "presentProofMessage"
+          ]
         }
       ]
     }

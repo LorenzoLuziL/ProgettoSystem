@@ -15,7 +15,7 @@ import ChoreoModeler from 'chor-js/lib/Modeler';
 import magicPropertiesProviderModule from '../../lib/property-panel/provider/magic';
 import magicModdleDescriptor from '../../lib/property-panel/descriptors/magic';
 // import chorpropertieProvider from '../../lib/properties-provider/index'
-import { _agents, _mortgageSchema, _offerPropertySchema, _ownershipSchema } from "../../ssi/config";
+import { _mortgageSchema, _offerPropertySchema, _ownershipSchema } from "../../ssi/config";
 import {createCurl} from "../../components/util/APIUtils";
 
 import { createSchemaAPI, createCredDefAPI, connectAgents, receiveInvitation,getAgent } from "../util/APIUtils.js";
@@ -227,7 +227,6 @@ class BpmnModelerComponent extends React.Component {
 
 
   startExecution = () => {
-    document.querySelector('[data-id="creaComandi"]').addEventListener('click',()=>getXml(this.modeler))
     document.querySelector('[data-id="saveModel"]').addEventListener('click',()=>saveModel(this.modeler))
     setAgentsPort(this.modeler)
     var canvas = this.modeler.get('canvas');
@@ -294,6 +293,7 @@ class BpmnModelerComponent extends React.Component {
   
 }
 function getXml(modeler) {
+  console.log("premuto")
   const elementRegistry = modeler.get('elementRegistry');
   // Get all elements
   const allElements = elementRegistry.getAll();
@@ -333,9 +333,10 @@ function readSchema(modeler){
       let nomeParticipant=message.sourceRef.name.toLowerCase();
       let schema={
         attributes: credentialPreviewAttributes,
-        schema_name: getSchemaName(nomeParticipant),
+        schema_name: message.messageRef.nomeSchemaAttr,
         schema_version: "1.0",
       }
+
       createSchemaAPI(message.sourceRef.port+1,schema)
       .then(res=>{
         createCredDefAPI(message.sourceRef.port+1,res.schema.id)
@@ -349,7 +350,7 @@ function readSchema(modeler){
   })
 }
 function saveModel(model){
-  
+  console.log("modello salvato ")
   return new Promise((resolve, reject) => {
     // Get the XML in string format
     model.saveXML({ format: true }).then(result => {
@@ -391,7 +392,7 @@ function setAgentsPort(model){
       arrayAgenti.push(agente);
     })
 
-    console.log(senderRequestBody)
+    localStorage.setItem("agents",JSON.stringify(arrayAgenti));
 }
 function callBack() {
   try {
@@ -425,7 +426,7 @@ function callBack() {
 function retryFetch(delay, maxRetries, port) {
   console.log("entro");
   let options={
-    url:`http://https://friendly-couscous-r444p94p66qg354v4-${port}.app.github.dev`
+    url:`https://friendly-couscous-r444p94p66qg354v4-${port}.app.github.dev`
   }
   return new Promise((resolve, reject) => {
     const fetchWithRetry = (currentRetry) => {
@@ -453,8 +454,8 @@ export function getAgenti(){
 }
 
 export function getPortByAgentName(name){
-  let port="0000";
-  arrayAgenti.forEach((element)=>{
+  let port=0;
+  JSON.parse(localStorage.getItem('agents')).forEach((element)=>{
     let nome=element.name.toLowerCase()
     if(nome==name){
       port=element.port;

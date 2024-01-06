@@ -5,7 +5,7 @@ import "./SSIPage.css";
 //import Popper from "popper.js";
 import 'bootstrap/dist/js/bootstrap.bundle'
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import { _agents, _registryOffer, _proofRequest, _offerPropertySchema, _propertyOffer, _ownershipSchema, _mortgageSchema, _mortgageOffer, _mortgageRequest } from '../../ssi/config';
+import {  _registryOffer, _proofRequest, _offerPropertySchema, _propertyOffer, _ownershipSchema, _mortgageSchema, _mortgageOffer, _mortgageRequest } from '../../ssi/config';
 import {
   getConnections, sendOfferAPI, getCredDefIdAPI, getCredDefExchangedAPI,
   acceptOfferAPI, sendProofRequestAPI, getPresExchangeAPI, getValidCredentialAPI, sendPresentationAPI} from '../util/APIUtils';
@@ -150,6 +150,7 @@ class SSIPage extends React.Component {
   }
 
   sendProofRequest = () => {
+    
     sendProofRequestAPI(getPortByAgentName(localStorage.getItem("pageOpen")), document.querySelector('#textAreaCredDefEx').textContent).then(req => {
       console.log("Request Proof", req);
       window.localStorage.setItem("toColour", localStorage.getItem("toColour") + " " + localStorage.getItem("request").split("+")[1])
@@ -315,10 +316,8 @@ class SSIPage extends React.Component {
     { this.state.credDefExId != null ? console.log("this.state.credDefExId", this.state.credDefExId) : console.log("nullo") }
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"></link>
-    switch (localStorage.getItem("request").split("+")[0]) {
-      case "offercredential":
-      case "propertyoffer":
-      case "mortgagedeedsoffer":
+    switch (localStorage.getItem("typeOfMessage")) {
+      case "offerMessage":
         return (
           <MDBContainer fluid className='h-custom' style={{ width: '100%', marginTop: '50px' }} >
             <MDBRow className='d-flex justify-content-center align-items-center h-100' style={{ width: '110%' }}>
@@ -380,9 +379,7 @@ class SSIPage extends React.Component {
             </MDBRow>
 
           </MDBContainer>);
-      case "acceptcredential":
-      case "acceptoffer":
-      case "acceptmortgagedeeds":
+      case "acceptMessage":
         return (
 
           <MDBContainer fluid className='h-custom' style={{ width: '100%', marginTop: '50px' }} >
@@ -431,7 +428,10 @@ class SSIPage extends React.Component {
 
           </MDBContainer>
         )
-      case "requestproof": return (
+      case "proofrequestMessage":
+        _proofRequest.proof_request.requested_attributes.additionalProp1.name=localStorage.getItem('schemaAttr').split(';')[0];
+        _mortgageRequest.proof_request.requested_attributes.additionalProp1.name=localStorage.getItem('schemaAttr').split(';')[0];
+      return (
         <MDBContainer fluid className='h-custom' style={{ width: '100%', marginTop: '50px' }} >
 
           <MDBRow className='d-flex justify-content-center align-items-center h-100' style={{ width: '110%' }}>
@@ -477,7 +477,8 @@ class SSIPage extends React.Component {
 
         </MDBContainer>
       );
-      case "presentproof": return  (
+      case "presentProofMessage":
+      return  (
         <MDBContainer fluid className='h-custom' style={{ width: '100%', marginTop: '50px' }} >
 
           <MDBRow className='d-flex justify-content-center align-items-center h-100' style={{ width: '110%' }}>
@@ -513,11 +514,11 @@ class SSIPage extends React.Component {
                         <FloatingLabel controlId="floatingSelect" label="Select a valid Credential" style={{}}>
                           <Form.Select aria-label='mecojoni' id="selectValidCred" size="lg" onChange={this.handleValidCred} style={{}} >
                             {console.log("askdnaskjf ",this.state.validCred)}
-                            {/* <option value="" hidden></option>
+                            <option value="" hidden></option>
                             {this.state.validCred != null ? this.state.validCred.length >=1 ? this.state.validCred.map((entry) => 
                               <option key={entry.cred_info.referent} value={entry.cred_info.referent}>
                                 {entry.cred_info.referent}</option>) : <option value={this.state.validCred != null ? this.state.validCred[0].cred_info.referent : " "}>
-                              {this.state.validCred != null ? this.state.validCred[0].cred_info.referent : " "}</option> : <option value=' '>nada </option>} */}
+                              {this.state.validCred != null ? this.state.validCred[0].cred_info.referent : " "}</option> : <option value=' '>nada </option>}
                           </Form.Select>
                         </FloatingLabel>
                       </div>

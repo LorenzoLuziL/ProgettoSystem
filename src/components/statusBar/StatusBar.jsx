@@ -6,17 +6,16 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { grey } from '@mui/material/colors';
-import { _agents } from '../../ssi/config';
-import { event } from 'jquery';
 
+import { event } from 'jquery';
+import { getAgenti } from '../bpmn/bpmn.modeler.component';
 function StatusBar({ onValue }) {
 
   var active = localStorage.getItem("status")?.split(", ");
-  var allPart = Object.keys(_agents);
-  //console.log("name :", name) : console.log("name :", 0) )
-  console.log("allPart", allPart);
-  const [value, setValue] = React.useState('one');
 
+  var allPart = JSON.parse(localStorage.getItem("agents"));
+  //console.log("name :", name) : console.log("name :", 0) )
+  const [value, setValue] = React.useState('one');
   const handleChange = (event, newValue) => {
     if (newValue === "one")
       window.location.reload(false);
@@ -41,18 +40,19 @@ function StatusBar({ onValue }) {
         //indicatorColor='secondary'
         centered
       >
-        {allPart.map((name) => (
+        {allPart.map((agent) => (
+        
           <Tab
             //sx={{'& .MuiButtonBase-root':{backgroundColor:'black'}}}
             icon={<VerifiedIcon style={{ color: "green" }} />}
             iconPosition="bottom"
-            value={allPart.indexOf(name) === 0 ? "one" : _agents[name].agentPort}
-            key={name}
+            value={allPart.findIndex(e=>e.name==agent.name) === 0 ? "one" : agent.port}
+            key={agent.name}
             //onClick={}
-            label={name}
+            label={agent.name}
             wrapped
           />
-
+         
         ))}
       </Tabs>
     </Box>

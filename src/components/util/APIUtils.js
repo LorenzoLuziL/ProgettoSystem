@@ -1,4 +1,4 @@
-import { _agents, _proofPresentation } from "../../ssi/config";
+import { _proofPresentation } from "../../ssi/config";
 
 const request = (options) => {
     const headers = new Headers({
