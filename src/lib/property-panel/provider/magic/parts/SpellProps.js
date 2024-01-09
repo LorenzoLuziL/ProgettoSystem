@@ -14,7 +14,7 @@ var domify = require('min-dom').domify;
 
 const [schema, setSchema] = ([]);
 
-function html(name, messageName, id) {
+function html(name, messageName, id,participants) {
 
   //const agentService = require('../../../../../ssi/AgentService');
   //const allConnections = await agentService.getConnections();
@@ -24,7 +24,9 @@ function html(name, messageName, id) {
   window.localStorage.setItem("request", parsedMessageName + "+" + id);
   console.log("item", localStorage.getItem("request").split("+")[0])
   window.localStorage.setItem("pageOpen", parsedName);
-
+  let receiver=participants.filter((e)=>e.name.toLowerCase()!=name.toLowerCase())
+  console.log(receiver[0])
+  window.localStorage.setItem("pageReceiver",receiver[0].name.toLowerCase());
   window.dispatchEvent(new Event("storage"));
   window.location.reload(false);
 
@@ -257,7 +259,7 @@ export default function (group, element, translate, bpmnFactory) {
       group.entries.push(
         {
           id: "tortellini",
-          html: html(element.parent.businessObject.name, element.businessObject.name, element.businessObject.id),
+          html: html(element.parent.businessObject.name, element.businessObject.name, element.businessObject.id,element.parent.parent.businessObject.participantRef),
           modelProperty: "tortellini",
 
           //html: fdomify(element.businessObject.name)

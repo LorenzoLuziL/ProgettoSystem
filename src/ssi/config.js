@@ -165,7 +165,7 @@ export const _proofRequest = {
         "version": "1.0",
         "requested_attributes": {
             "additionalProp1": {
-                "name": "city",
+                "name": "citta",
                 "cred_def_id": "16YXSaLmsrcyAE7dC5C1Wp:3:CL:12:default",
                 "restrictions": [
                     {
