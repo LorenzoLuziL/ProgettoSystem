@@ -30,31 +30,30 @@ import {
 }
   from 'mdb-react-ui-kit';
 
-
+let counter=0;
+let counterTwo=0;
 class SSIPage extends React.Component {
 
   constructor(props) {
+    counter=0;
+    counterTwo=0;
     super(props);
     this.state = {
       agentConnections: null, connId: null, credDefId: null, bodyOffer: null, credDefExId: null,
       credDefExIdText: null, credPresExId: null, credPresExIdText: null, validCred: null, validCredText: null,
-      createOwnershipbool: false, createPropertybool: false, createMortgagebool: false,shouldTriggerFunction: true
+      createOwnershipbool: false, createPropertybool: false, createMortgagebool: false
     }
 
   }
   componentDidMount = () => {
     console.log(this.state.shouldTriggerFunction)
-    if(this.state.shouldTriggerFunction){
-      this.state.shouldTriggerFunction=false;
     setTimeout(() => {
       this.getConnections();
       this.getCredentialDefinitions();
       this.getPresExchange();
       this.getCredDefExchange();
       this.callCredDef();
-      
     }, 500)
-  }
   }
 
   handleConnIdChange = (e) => {
@@ -85,11 +84,13 @@ class SSIPage extends React.Component {
     //  
   }
   handleCredDefExIdChangeTemp = () => {
-    // console.log("asdsadadsad")
-    this.setState({ credDefExIdText: this.state.credDefExId.filter(cred => cred.credential_exchange_id === document.querySelector('#selectCredEx').textContent) })
-    // this.setState({credDefExId : e.target.value})
-    //document.querySelector("#selectCredEx").textContent = this.state.credDefExId.filter(cred => cred.credential_exchange_id === e.target.value)
-    //  
+    if(counter<15){
+      // console.log("asdsadadsad")
+      this.setState({ credDefExIdText: this.state.credDefExId.filter(cred => cred.credential_exchange_id === document.querySelector('#selectCredEx').textContent) })
+      // this.setState({credDefExId : e.target.value})
+      //document.querySelector("#selectCredEx").textContent = this.state.credDefExId.filter(cred => cred.credential_exchange_id === e.target.value)
+      counter++;  
+    }
   }
   handlePresExIdChange = (e) => {
     /*  this.setState({
@@ -284,20 +285,26 @@ class SSIPage extends React.Component {
     /*  this.setState({
        credPresExId: e.target.value
      }) */
-    this.getValidCredential();
-    console.log(this.state.validCred)
-    this.setState({
-      credPresExIdText: this.state.credPresExId.filter(cred =>
-        cred.presentation_exchange_id === document.querySelector('#selectPresEx').textContent)
-    })
-
+     if(counter<15){
+      console.log("sono qui")
+      this.getValidCredential();
+      console.log(this.state.validCred)
+      this.setState({
+        credPresExIdText: this.state.credPresExId.filter(cred =>
+          cred.presentation_exchange_id === document.querySelector('#selectPresEx').textContent)
+      })
+      counter++;
+    }
   }
   handleValidCredTemp = () => {
-
-    this.setState({
-      validCredText: this.state.validCred.filter(cred =>
-        cred.cred_info.referent === document.querySelector('#selectValidCred').textContent)
-    })
+    if(counterTwo<15){
+      console.log("sono qui 2")
+      this.setState({
+        validCredText: this.state.validCred.filter(cred =>
+          cred.cred_info.referent === document.querySelector('#selectValidCred').textContent)
+      })
+      counterTwo++;
+    }
   }
   renderTableForAttributes = () => {
     const schemaAttr = localStorage.getItem("schemaAttr");
@@ -443,6 +450,9 @@ class SSIPage extends React.Component {
 
           </MDBContainer>);
       case "acceptMessage":
+        // setTimeout(()=>{
+        //   this.shouldTriggerFunction=false;
+        // },5000)
         setTimeout(()=>{this.handleCredDefExIdChangeTemp()},1200)
         return (
 
@@ -545,12 +555,13 @@ class SSIPage extends React.Component {
           </MDBContainer>
         );
       case "presentProofMessage":
+
         setTimeout(()=>{
           this.handlePresExIdChangeTemp()
-        },1200)
+        },1200);
         setTimeout(()=>{
           this.handleValidCredTemp();
-        },1500)
+        },1200);
         return (
           <MDBContainer fluid className='h-custom' style={{ width: '100%', marginTop: '50px' }} >
 
