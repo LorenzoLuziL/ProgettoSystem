@@ -10,7 +10,13 @@ import {
   getConnections, sendOfferAPI, getCredDefIdAPI, getCredDefExchangedAPI,
   acceptOfferAPI, sendProofRequestAPI, getPresExchangeAPI, getValidCredentialAPI, sendPresentationAPI
 } from '../util/APIUtils';
-
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 import {
   MDBBtn,
   MDBContainer,
@@ -39,14 +45,14 @@ class SSIPage extends React.Component {
   componentDidMount = () => {
     console.log(this.state.shouldTriggerFunction)
     if(this.state.shouldTriggerFunction){
-      console.log("asfafs")
+      this.state.shouldTriggerFunction=false;
     setTimeout(() => {
       this.getConnections();
       this.getCredentialDefinitions();
       this.getPresExchange();
       this.getCredDefExchange();
       this.callCredDef();
-      this.state.shouldTriggerFunction=false
+      
     }, 500)
   }
   }
@@ -300,10 +306,9 @@ class SSIPage extends React.Component {
     }
 
     const attributes = schemaAttr.split(";");
-    return attributes.map((attribute, index) => (
-      <div key={index} style={{ marginBottom: "20px" }}>
-        <h5 className="fw-normal mb-3 text-body" style={{ color: '#4835d4', width: '100%' }}>{attribute}</h5>
-        <MDBRow>
+    return (
+      <div style={{ marginBottom: "20px" }}>
+        {/* <MDBRow>
           <MDBCol md="6" className="bg-indigo p-3">
             <MDBTable striped bordered>
               <MDBTableBody>
@@ -322,9 +327,32 @@ class SSIPage extends React.Component {
               </MDBTableBody>
             </MDBTable>
           </MDBCol>
-        </MDBRow>
+        </MDBRow> */}
+        <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableBody>
+          {attributes.map((attribute, index) => (
+            <TableRow
+              key={attribute}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                {attribute}
+              </TableCell>
+              <TableCell align="right">
+                <MDBTextArea
+                      size="lg"
+                      id={`textArea_${index}`}
+                      style={{ backgroundColor: 'white'}}
+                      rows={3}
+                    /></TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
       </div>
-    ));
+    );
   };
 
   //({ pageOpen, setPageOpen })
