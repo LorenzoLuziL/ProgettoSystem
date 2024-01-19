@@ -43,6 +43,8 @@ These external repositories are already included in the main repository:
 - Indy-Von Network: [von-network](https://github.com/bcgov/von-network)
 - Indy Tails Server: [indy-tails-server](https://github.com/bcgov/indy-tails-server)
 
+If you're not using codespace you can run the tool following the instructions below.
+
 ### Make the code runnable for Virtual Machines
 First of all modify the following files
 > [!CAUTION]
