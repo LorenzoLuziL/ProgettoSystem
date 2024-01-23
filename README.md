@@ -9,6 +9,26 @@ Self-sovereign identity (SSI) is an emerging concept in the field of digital ide
 
 This software is a model-driven framework that can replicate the behavior and reproduce all the typical operations of self-sovereign identity systems.
 
+## Running in codespace 
+
+Once a new codespace instance have been initialized, build the von-network with:
+```
+./von-network/manage build
+```
+then, install and use the version 14.17.5 of Node,
+```
+nvm install 14.17.5
+```
+install the dependencies of the project and run the tool,
+```
+npm i
+npm run start
+```
+> [!CAUTION]
+> The first time running the tool, in the “Ports” section, right click in the “Visibility” section and change it into “Public”.
+
+As last step, click on the icon that reminds to the web view (mapped on the port 3000) to see the webview of the program running. 
+
 ## Requirements for running in a new Virtual Machine 
 - Docker: https://docs.docker.com/engine/install/
 ```
