@@ -39,8 +39,8 @@ function html(name, messageName, id,participants) {
 
   return domify('<div class="bpp-field-getCurrentUser(getPortByAgentName(parsedName));wrapper"' +
     '<div class="bpp-properties-entry" ' + 'data-show="show"' + '>' +
-    '<label for="tortellini">' + "click to perform SSI operation" + '</label>' +
-    '<a id="tortellini" href=' + url + ' target="_blank"  add" data-action="addElement"><button type="button" class="btn btn-outline-primary" data-action="addElement" ><span>Execute</span></button></a>' +
+    '<label for="trt">' + "click to perform SSI operation" + '</label>' +
+    '<a id="trt" href=' + url + ' target="_blank"  add" data-action="addElement"><button type="button" class="btn btn-outline-primary" data-action="addElement" ><span>Execute</span></button></a>' +
     '</div>' +
     "</div>");
   //console.log("_agents",_agents[name.toLowerCase()]);
@@ -104,7 +104,7 @@ function connectParticipants() {
 
   return domify('<div class="bpp-field-wrapper" style="flex-direction:column;">' +
     '<div class="bpp-properties-entry" ' + 'data-show="show"' + ' >' +
-    '<label for="tortellini">' + "Click to connect all the involved participants and create their credentials" + '</label>' +
+    '<label for="trt">' + "Click to connect all the involved participants and create their credentials" + '</label>' +
     '</div>' +
     '<button type="button"  class="btn btn-outline-primary" data-action="connectElement" data-id="creaComandi"><span>Connect </span></button>' +
 
@@ -139,9 +139,9 @@ export default function (group, element, translate, bpmnFactory) {
     console.log(group.entries)
     group.entries.push(
       {
-        id: "tortellini",
+        id: "trt",
         html: connectParticipants(),
-        modelProperty: "tortellini",
+        modelProperty: "trt",
         connectElement: function () {
           funzioneTemporanea(element);
           return
@@ -163,9 +163,9 @@ export default function (group, element, translate, bpmnFactory) {
     //fdomify(element.businessObject.name);
     group.entries.push(
       {
-        id: "tortellini",
+        id: "trt",
         html: "port" + element.businessObject.port,
-        modelProperty: "tortellini",
+        modelProperty: "trt",
 
         //html: fdomify(element.businessObject.name)
       }
@@ -243,9 +243,9 @@ export default function (group, element, translate, bpmnFactory) {
         //       window.localStorage.setItem("split", 'active');
         //       group.entries.push(
         //         {
-        //           id: "tortellini",
+        //           id: "trt",
         //           html: html(element.parent.businessObject.name, element.businessObject.name, element.businessObject.id),
-        //           modelProperty: "tortellini",
+        //           modelProperty: "trt",
 
         //           //html: fdomify(element.businessObject.name)
         //         }
@@ -258,9 +258,9 @@ export default function (group, element, translate, bpmnFactory) {
 
       group.entries.push(
         {
-          id: "tortellini",
+          id: "trt",
           html: html(element.parent.businessObject.name, element.businessObject.name, element.businessObject.id,element.parent.parent.businessObject.participantRef),
-          modelProperty: "tortellini",
+          modelProperty: "trt",
 
           //html: fdomify(element.businessObject.name)
         }

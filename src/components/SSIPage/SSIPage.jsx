@@ -400,7 +400,7 @@ class SSIPage extends React.Component {
                           {localStorage.getItem("pageOpen").toUpperCase() + ": " + localStorage.getItem("request").split("+")[0]}</h3>
                         <div>
                           <FloatingLabel controlId="floatingSelect" label="Select a Connection ID" style={{}}>
-                            <Form.Select aria-label='mecojoni' size="lg" value={this.state.connId != null ? this.state.connId : " "} onChange={this.handleConnIdChange} style={{}}>
+                            <Form.Select aria-label='mcj' size="lg" value={this.state.connId != null ? this.state.connId : " "} onChange={this.handleConnIdChange} style={{}}>
                               
                               {this.state.agentConnections != null ?
                                 (this.state.agentConnections.length >= 1 ?
@@ -415,7 +415,7 @@ class SSIPage extends React.Component {
                         </div>
                         <div style={{ marginTop: "5px" }}>
                           <FloatingLabel controlId="floatingSelect" label="Select a Credential Definition ID" style={{}}>
-                            <Form.Select aria-label='mecojoni' size="lg" id="selectCredDef" value={this.state.credDefId != null ? this.state.credDefId : " "} onSelect={this.handleCredDefIdChange} onChange={this.handleCredDefIdChange} style={{}} >
+                            <Form.Select aria-label='mcj' size="lg" id="selectCredDef" value={this.state.credDefId != null ? this.state.credDefId : " "} onSelect={this.handleCredDefIdChange} onChange={this.handleCredDefIdChange} style={{}} >
                               <option value="" hidden> </option>
                               {this.state.credDefId != null ? this.state.credDefId >= 1 ? this.state.credDefId.map((entry) =>
                                 <option key={this.state.credDefId[0]} value={this.state.credDefId[0]}>
@@ -475,7 +475,7 @@ class SSIPage extends React.Component {
 
                         <div style={{ marginTop: "5px" }}>
                           <FloatingLabel controlId="floatingSelect" label="Select a Credential Exchange ID" style={{}}>
-                            <Form.Select aria-label='mecojoni' size="lg" id="selectCredEx" onSelect={this.handleCredDefExIdChange} onChange={this.handleCredDefExIdChange} style={{}} >
+                            <Form.Select aria-label='mcj' size="lg" id="selectCredEx" onSelect={this.handleCredDefExIdChange} onChange={this.handleCredDefExIdChange} style={{}} >
                               {this.state.credDefExId != null ? this.state.credDefExId.length >= 1 ? this.state.credDefExId.filter(cred => cred.state === "offer_received").map((entry) =>
                                 <option key={entry.credential_exchange_id} value={entry.credential_exchange_id}>
                                   {entry.credential_exchange_id}</option>) : <option value={this.state.credDefExId.length >= 1 ? this.state.credDefExId[0].credential_exchange_id : " "}>
@@ -524,7 +524,7 @@ class SSIPage extends React.Component {
 
                         <div>
                           <FloatingLabel controlId="floatingSelect" label="Select a Connection ID" style={{}}>
-                            <Form.Select aria-label='mecojoni' size="lg" id="selectCredEx" value={this.state.connId != null ? this.state.connId : " "} onChange={this.handleConnIdChange} style={{}} >
+                            <Form.Select aria-label='mcj' size="lg" id="selectCredEx" value={this.state.connId != null ? this.state.connId : " "} onChange={this.handleConnIdChange} style={{}} >
                             {this.state.agentConnections != null ?
                                 (this.state.agentConnections.length >= 1 ?
                                   <option key={this.state.agentConnections[0].connection_id} value={this.state.agentConnections[0].connection_id}>
@@ -582,7 +582,7 @@ class SSIPage extends React.Component {
 
                         <div>
                           <FloatingLabel controlId="floatingSelect" label="Select a Presentation Exchange ID" style={{}}>
-                            <Form.Select aria-label='mecojoni' id="selectPresEx" size="lg" onChange={this.handlePresExIdChange} style={{}} >
+                            <Form.Select aria-label='mcj' id="selectPresEx" size="lg" onChange={this.handlePresExIdChange} style={{}} >
                              
                               {this.state.credPresExId !== null ? this.state.credPresExId.length >= 1 ? this.state.credPresExId.filter(cred => cred.state === "request_received").map((entry) =>
                                 <option key={entry.presentation_exchange_id} value={entry.presentation_exchange_id}>
@@ -596,7 +596,7 @@ class SSIPage extends React.Component {
                         </div>
                         <div style={{ width: '100%', marginTop: "5px" }}>
                           <FloatingLabel controlId="floatingSelect" label="Select a valid Credential" style={{}}>
-                            <Form.Select aria-label='mecojoni' id="selectValidCred" size="lg" onChange={this.handleValidCred} style={{}} >
+                            <Form.Select aria-label='mcj' id="selectValidCred" size="lg" onChange={this.handleValidCred} style={{}} >
                               {console.log("askdnaskjf ", this.state.validCred)}       
                               {this.state.validCred != null ? this.state.validCred.length >= 1 ? this.state.validCred.map((entry) =>
                                 <option key={entry.cred_info.referent} value={entry.cred_info.referent}>
